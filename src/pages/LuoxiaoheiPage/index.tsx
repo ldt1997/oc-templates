@@ -1,30 +1,47 @@
-import { useRef, useState } from 'react';
-import { Card, ColorPicker, Form, Input, Button, Slider, Typography, Upload, message, type UploadFile, type UploadProps } from 'antd';
-import { DownloadOutlined, InboxOutlined } from '@ant-design/icons';
-import { toPng } from 'html-to-image';
-import { TemplateWorkbenchLayout } from '../../components/template/TemplateWorkbenchLayout';
-import { getRgbString } from '../../utils/colorConverter';
-import '../TemplatePage.css';
-import './LuoxiaoheiPage.css';
+import { useRef, useState } from "react";
+import {
+  Card,
+  ColorPicker,
+  Form,
+  Input,
+  Button,
+  Slider,
+  Typography,
+  Upload,
+  message,
+  type UploadFile,
+  type UploadProps,
+} from "antd";
+import {
+  DownloadOutlined,
+  InboxOutlined,
+  LeftOutlined,
+  RightOutlined,
+} from "@ant-design/icons";
+import { toPng } from "html-to-image";
+import { TemplateWorkbenchLayout } from "../../components/template/TemplateWorkbenchLayout";
+import { getRgbString } from "../../utils/colorConverter";
+import "../TemplatePage.css";
+import "./LuoxiaoheiPage.css";
 
 const { Dragger } = Upload;
 
 export function LuoxiaoheiPage() {
   // 状态管理
   const [panelCollapsed, setPanelCollapsed] = useState(false);
-  const [bgColor1, setBgColor1] = useState('#ff385c'); // Rausch Red
-  const [bgColor2, setBgColor2] = useState('#222222'); // 深灰
-  const [logoColor, setLogoColor] = useState('#ff385c');
-  const [title1, setTitle1] = useState('朝');
-  const [title2, setTitle2] = useState('晚');
-  const [userImage, setUserImage] = useState<string>('');
+  const [bgColor1, setBgColor1] = useState("#ff385c"); // Rausch Red
+  const [bgColor2, setBgColor2] = useState("#222222"); // 深灰
+  const [logoColor, setLogoColor] = useState("#ff385c");
+  const [title1, setTitle1] = useState("朝");
+  const [title2, setTitle2] = useState("晚");
+  const [userImage, setUserImage] = useState<string>("");
   const [imageScale, setImageScale] = useState(1);
   const [canvasScale, setCanvasScale] = useState(1);
   const canvasRef = useRef<HTMLDivElement>(null);
 
   // 图片上传处理
   const uploadProps: UploadProps = {
-    accept: 'image/*',
+    accept: "image/*",
     maxCount: 1,
     beforeUpload: () => false,
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -40,7 +57,7 @@ export function LuoxiaoheiPage() {
   // 导出功能
   async function handleExport() {
     if (!canvasRef.current) {
-      message.error('预览区域尚未准备好');
+      message.error("预览区域尚未准备好");
       return;
     }
 
@@ -48,15 +65,15 @@ export function LuoxiaoheiPage() {
       const dataUrl = await toPng(canvasRef.current, {
         cacheBust: true,
         pixelRatio: 2,
-        backgroundColor: '#ffffff',
+        backgroundColor: "#ffffff",
       });
 
-      const link = document.createElement('a');
-      link.download = 'luoxiaohei-poster.png';
+      const link = document.createElement("a");
+      link.download = "luoxiaohei-poster.png";
       link.href = dataUrl;
       link.click();
     } catch {
-      message.error('导出失败，请重试');
+      message.error("导出失败，请重试");
     }
   }
 
@@ -65,7 +82,16 @@ export function LuoxiaoheiPage() {
     <Card className="control-card" bordered={false}>
       <div className="panel-head">
         <div>
-          <Typography.Title level={4}>罗小黑人物双色海报</Typography.Title>
+          <div className="luoxiaohei-panel-title-row">
+            <Typography.Title level={4}>罗小黑人物双色海报</Typography.Title>
+            <Button
+              className="luoxiaohei-panel-toggle"
+              type="text"
+              aria-label={panelCollapsed ? "展开参数" : "收起参数"}
+              icon={panelCollapsed ? <RightOutlined /> : <LeftOutlined />}
+              onClick={() => setPanelCollapsed((value) => !value)}
+            />
+          </div>
           <Typography.Paragraph className="panel-desc">
             配置背景色、标题和图片，实时生成风格统一的视觉海报。
           </Typography.Paragraph>
@@ -75,32 +101,6 @@ export function LuoxiaoheiPage() {
       {!panelCollapsed ? (
         <div className="panel-scroll">
           <Form layout="vertical" requiredMark={false}>
-            <Form.Item label="背景色 1">
-              <ColorPicker value={bgColor1} onChange={(c) => setBgColor1(c.toHexString())} showText />
-            </Form.Item>
-
-            <Form.Item label="背景色 2">
-              <ColorPicker value={bgColor2} onChange={(c) => setBgColor2(c.toHexString())} showText />
-            </Form.Item>
-
-            <Form.Item label="标题 1（竖向）">
-              <Input
-                maxLength={5}
-                value={title1}
-                onChange={(e) => setTitle1(e.target.value)}
-                placeholder="单个汉字"
-              />
-            </Form.Item>
-
-            <Form.Item label="标题 2（竖向）">
-              <Input
-                maxLength={5}
-                value={title2}
-                onChange={(e) => setTitle2(e.target.value)}
-                placeholder="单个汉字"
-              />
-            </Form.Item>
-
             <Form.Item label="上传素材图片">
               <Dragger {...uploadProps}>
                 <p className="ant-upload-drag-icon">
@@ -111,11 +111,54 @@ export function LuoxiaoheiPage() {
             </Form.Item>
 
             <Form.Item label="图片缩放">
-              <Slider min={0.5} max={2} step={0.1} value={imageScale} onChange={setImageScale} />
+              <Slider
+                min={0.5}
+                max={2}
+                step={0.1}
+                value={imageScale}
+                onChange={setImageScale}
+              />
+            </Form.Item>
+            <Form.Item label="背景色 1">
+              <ColorPicker
+                value={bgColor1}
+                onChange={(c) => setBgColor1(c.toHexString())}
+                showText
+              />
+            </Form.Item>
+
+            <Form.Item label="背景色 2">
+              <ColorPicker
+                value={bgColor2}
+                onChange={(c) => setBgColor2(c.toHexString())}
+                showText
+              />
+            </Form.Item>
+
+            <Form.Item label="左边标题">
+              <Input
+                maxLength={5}
+                value={title1}
+                onChange={(e) => setTitle1(e.target.value)}
+                placeholder="五个汉字以内"
+              />
+            </Form.Item>
+
+            <Form.Item label="右边标题">
+              <Input
+                maxLength={5}
+                value={title2}
+                onChange={(e) => setTitle2(e.target.value)}
+                placeholder="五个汉字以内"
+              />
             </Form.Item>
 
             <Form.Item label="Logo 颜色">
-              <ColorPicker value={logoColor} onChange={(c) => setLogoColor(c.toHexString())} showText />
+              <ColorPicker
+                value={logoColor}
+                onChange={(c) => setLogoColor(c.toHexString())}
+                showText
+              />
             </Form.Item>
           </Form>
         </div>
@@ -126,22 +169,41 @@ export function LuoxiaoheiPage() {
   // 预览区：6层图层堆叠
   const preview = (
     <div className="preview-column">
-      <div className="preview-toolbar" style={{ gap: '12px', alignItems: 'center' }}>
-        <span style={{ fontSize: '12px', color: 'var(--palette-text-secondary)', whiteSpace: 'nowrap' }}>
+      <div
+        className="preview-toolbar"
+        style={{ gap: "12px", alignItems: "center" }}
+      >
+        <span
+          style={{
+            fontSize: "12px",
+            color: "var(--palette-text-secondary)",
+            whiteSpace: "nowrap",
+          }}
+        >
           缩放
         </span>
         <Slider
           min={0.5}
-          max={1.5}
+          max={1}
           step={0.1}
           value={canvasScale}
           onChange={setCanvasScale}
-          style={{ flex: 1, minWidth: '120px' }}
+          style={{ flex: 1, minWidth: "120px" }}
         />
-        <span style={{ fontSize: '12px', color: 'var(--palette-text-secondary)', minWidth: '32px' }}>
+        <span
+          style={{
+            fontSize: "12px",
+            color: "var(--palette-text-secondary)",
+            minWidth: "32px",
+          }}
+        >
           {(canvasScale * 100).toFixed(0)}%
         </span>
-        <Button type="primary" icon={<DownloadOutlined />} onClick={handleExport}>
+        <Button
+          type="primary"
+          icon={<DownloadOutlined />}
+          onClick={handleExport}
+        >
           导出图片
         </Button>
       </div>
@@ -151,8 +213,8 @@ export function LuoxiaoheiPage() {
         className="luoxiaohei-canvas"
         style={{
           transform: `scale(${canvasScale})`,
-          transformOrigin: 'top center',
-          transition: 'transform 0.2s ease',
+          transformOrigin: "top center",
+          transition: "transform 0.2s ease",
         }}
       >
         {/* 1. 白色背景 - 默认 */}
@@ -161,11 +223,15 @@ export function LuoxiaoheiPage() {
         <div className="luoxiaohei-bg">
           <div
             className="luoxiaohei-bg-left"
-            style={{ background: `linear-gradient(to bottom, ${bgColor1} 0%, ${bgColor1} 38%, #ffffff 100%)` }}
+            style={{
+              background: `linear-gradient(to bottom, ${bgColor1} 0%, ${bgColor1} 38%, #ffffff 100%)`,
+            }}
           />
           <div
             className="luoxiaohei-bg-right"
-            style={{ background: `linear-gradient(to bottom, ${bgColor2} 0%, ${bgColor2} 38%, #ffffff 100%)` }}
+            style={{
+              background: `linear-gradient(to bottom, ${bgColor2} 0%, ${bgColor2} 38%, #ffffff 100%)`,
+            }}
           />
         </div>
 
@@ -173,12 +239,15 @@ export function LuoxiaoheiPage() {
         <div
           className="luoxiaohei-bamboo"
           style={{
-            backgroundImage: 'url(/templates/luoxiaohei/photos/bamboo.png)',
+            backgroundImage: "url(/templates/luoxiaohei/photos/bamboo.png)",
           }}
         />
 
         {/* 4. 左上角文字块 - 背景色2色 */}
-        <div className="luoxiaohei-text-block luoxiaohei-text-left" style={{ color: bgColor2 }}>
+        <div
+          className="luoxiaohei-text-block luoxiaohei-text-left"
+          style={{ color: bgColor2 }}
+        >
           <div className="luoxiaohei-title">{title1}</div>
           <div className="luoxiaohei-text-small">
             <div>{getRgbString(bgColor1)}</div>
@@ -187,7 +256,10 @@ export function LuoxiaoheiPage() {
         </div>
 
         {/* 4. 右上角文字块 - 背景色1色 */}
-        <div className="luoxiaohei-text-block luoxiaohei-text-right" style={{ color: bgColor1 }}>
+        <div
+          className="luoxiaohei-text-block luoxiaohei-text-right"
+          style={{ color: bgColor1 }}
+        >
           <div className="luoxiaohei-title">{title2}</div>
           <div className="luoxiaohei-text-small">
             <div>{getRgbString(bgColor2)}</div>
@@ -221,8 +293,9 @@ export function LuoxiaoheiPage() {
     <TemplateWorkbenchLayout
       panel={panel}
       preview={preview}
-      collapsed={panelCollapsed}
-      onToggleCollapsed={() => setPanelCollapsed((value) => !value)}
+      collapsed={false}
+      onToggleCollapsed={() => undefined}
+      showDefaultToggle={false}
     />
   );
 }

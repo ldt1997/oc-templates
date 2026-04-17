@@ -56,6 +56,25 @@
   font-family: 'YuanGuSongTi-F', serif;
 }
 
+.luoxiaohei-panel-title-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.8rem;
+}
+
+.luoxiaohei-panel-toggle {
+  width: 2rem;
+  height: 2rem;
+  border-radius: 999px;
+  color: var(--palette-text-secondary);
+}
+
+.luoxiaohei-panel-toggle:hover {
+  background: var(--palette-surface-muted);
+  color: var(--palette-text-primary);
+}
+
 .luoxiaohei-text-left {
   left: 0;
 }
@@ -69,9 +88,9 @@
   font-weight: bold;
   writing-mode: vertical-rl;
   text-orientation: upright;
-  letter-spacing: 0.1rem;
+  letter-spacing: 0.1em;
   line-height: 1;
-  margin-bottom: 0.8em;
+  margin-bottom: 0.05em;
   white-space: nowrap;
   word-break: keep-all;
 }
@@ -97,12 +116,12 @@
 /* 6. Logo 层 */
 .luoxiaohei-logo {
   position: absolute;
-  bottom: 4em;
+  bottom: 2%;
   left: 50%;
   transform: translateX(-50%);
   z-index: 4;
-  width: 38em;
-  height: 8em;
+  width: 50%;
+  height: 15%;
 }
 
 .luoxiaohei-logo-mask {

@@ -28,6 +28,19 @@
 .workbench-preview {
   flex: 1 1 auto;
   min-width: 0;
+  position: relative;
+}
+
+.workbench-preview::before {
+  content: '';
+  position: absolute;
+  left: -10px;
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  background: color-mix(in srgb, var(--palette-border), transparent 15%);
+  box-shadow: rgba(15, 23, 42, 0.08) 0 0 14px;
+  pointer-events: none;
 }
 
 .workbench-toggle {
@@ -58,6 +71,10 @@
   .template-workbench {
     flex-direction: column;
     gap: 16px;
+  }
+
+  .workbench-preview::before {
+    display: none;
   }
 
   .workbench-panel {

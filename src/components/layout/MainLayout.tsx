@@ -7,7 +7,7 @@ export function MainLayout() {
     <div className="app-shell">
       <header className="top-nav">
         <Link className="brand" to="/">
-          PhotoForge
+          OCTemplate
         </Link>
         <div className="top-nav-right">
           <ThemeToggle />
