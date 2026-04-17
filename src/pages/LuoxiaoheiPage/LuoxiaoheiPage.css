@@ -2,12 +2,15 @@
 
 .luoxiaohei-canvas {
   position: relative;
-  width: 1080px;
-  height: 1920px;
+  width: 100%;
+  max-width: 1080px;
+  aspect-ratio: 1080 / 1920;
   background: white;
   overflow: hidden;
   border-radius: 20px;
   margin: 0 auto;
+  /* 动态基准 font-size: 容器宽度 / 108 = 1em（在 1080px 时 1em = 10px） */
+  font-size: clamp(9px, 100vw / 108, 14px);
 }
 
 /* 1. 背景层 */
@@ -37,7 +40,7 @@
 .luoxiaohei-text-block {
   position: absolute;
   top: 0;
-  padding: 20px;
+  padding: 2em;
   z-index: 2;
   font-family: 'YuanGuSongTi-F', serif;
 }
@@ -51,17 +54,17 @@
 }
 
 .luoxiaohei-title {
-  font-size: 80px;
+  font-size: 8em;
   font-weight: bold;
   writing-mode: vertical-rl;
-  transform: rotate(180deg);
-  letter-spacing: 8px;
+  text-orientation: mixed;
+  letter-spacing: 0.8em;
   line-height: 1;
-  margin-bottom: 12px;
+  margin-bottom: 1.2em;
 }
 
 .luoxiaohei-text-small {
-  font-size: 12px;
+  font-size: 1.2em;
   line-height: 1.6;
   font-family: 'Monaco', 'Menlo', monospace;
 }
@@ -81,11 +84,11 @@
 /* 6. Logo 层 */
 .luoxiaohei-logo {
   position: absolute;
-  bottom: 40px;
+  bottom: 4em;
   left: 50%;
   transform: translateX(-50%);
   z-index: 4;
-  height: 80px;
+  height: 8em;
   object-fit: contain;
 }
 

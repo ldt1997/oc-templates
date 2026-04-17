@@ -19,6 +19,7 @@ export function LuoxiaoheiPage() {
   const [title2, setTitle2] = useState('晚');
   const [userImage, setUserImage] = useState<string>('');
   const [imageScale, setImageScale] = useState(1);
+  const [canvasScale, setCanvasScale] = useState(1);
   const canvasRef = useRef<HTMLDivElement>(null);
 
   // 图片上传处理
@@ -62,8 +63,8 @@ export function LuoxiaoheiPage() {
   // 计算渐变背景样式
   const gradientStyle = useMemo(() => {
     return {
-      background: `linear-gradient(to bottom, ${bgColor1}, white, white), 
-                 linear-gradient(to bottom, ${bgColor2}, white, white)`,
+      background: `linear-gradient(to bottom, ${bgColor1}, ${bgColor1}, white), 
+                 linear-gradient(to bottom, ${bgColor2}, ${bgColor2}, white)`,
       backgroundSize: '50% 100%, 50% 100%',
       backgroundPosition: '0 0, 50% 0',
       backgroundRepeat: 'no-repeat',
@@ -108,7 +109,7 @@ export function LuoxiaoheiPage() {
 
             <Form.Item label="标题 1（竖向）">
               <Input
-                maxLength={1}
+                maxLength={5}
                 value={title1}
                 onChange={(e) => setTitle1(e.target.value)}
                 placeholder="单个汉字"
@@ -117,7 +118,7 @@ export function LuoxiaoheiPage() {
 
             <Form.Item label="标题 2（竖向）">
               <Input
-                maxLength={1}
+                maxLength={5}
                 value={title2}
                 onChange={(e) => setTitle2(e.target.value)}
                 placeholder="单个汉字"
@@ -149,13 +150,35 @@ export function LuoxiaoheiPage() {
   // 预览区：6层图层堆叠
   const preview = (
     <div className="preview-column">
-      <div className="preview-toolbar">
+      <div className="preview-toolbar" style={{ gap: '12px', alignItems: 'center' }}>
+        <span style={{ fontSize: '12px', color: 'var(--palette-text-secondary)', whiteSpace: 'nowrap' }}>
+          缩放
+        </span>
+        <Slider
+          min={0.5}
+          max={1.5}
+          step={0.1}
+          value={canvasScale}
+          onChange={setCanvasScale}
+          style={{ flex: 1, minWidth: '120px' }}
+        />
+        <span style={{ fontSize: '12px', color: 'var(--palette-text-secondary)', minWidth: '32px' }}>
+          {(canvasScale * 100).toFixed(0)}%
+        </span>
         <Button type="primary" icon={<DownloadOutlined />} onClick={handleExport}>
           导出图片
         </Button>
       </div>
 
-      <div ref={canvasRef} className="luoxiaohei-canvas">
+      <div
+        ref={canvasRef}
+        className="luoxiaohei-canvas"
+        style={{
+          transform: `scale(${canvasScale})`,
+          transformOrigin: 'top center',
+          transition: 'transform 0.2s ease',
+        }}
+      >
         {/* 1. 白色背景 - 默认 */}
 
         {/* 2. 双色渐变背景 */}
