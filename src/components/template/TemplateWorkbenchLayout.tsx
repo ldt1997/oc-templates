@@ -1,6 +1,7 @@
 import type { CSSProperties, ReactNode } from 'react';
 import { Button } from 'antd';
 import { LeftOutlined, RightOutlined } from '@ant-design/icons';
+import './TemplateWorkbenchLayout.css';
 
 interface TemplateWorkbenchLayoutProps {
   panel: ReactNode;

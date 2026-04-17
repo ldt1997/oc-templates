@@ -15,6 +15,7 @@ import {
 import { DownloadOutlined, InboxOutlined } from '@ant-design/icons';
 import { toPng } from 'html-to-image';
 import { TemplateWorkbenchLayout } from '../components/template/TemplateWorkbenchLayout';
+import './LuoxiaoheiPage.css';
 
 const { Dragger } = Upload;
 

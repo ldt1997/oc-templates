@@ -1,6 +1,7 @@
 import { Card, Button } from 'antd';
 import { Link } from 'react-router-dom';
 import type { TemplateMeta } from '../../types/template';
+import './TemplateCard.css';
 
 interface TemplateCardProps {
   template: TemplateMeta;

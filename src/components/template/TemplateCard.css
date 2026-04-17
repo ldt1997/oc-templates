@@ -1,0 +1,32 @@
+.template-card {
+  border-radius: 16px !important;
+  overflow: hidden;
+  box-shadow: var(--shadow-card);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.template-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-hover);
+}
+
+.template-card img {
+  width: 100%;
+  aspect-ratio: 3 / 4;
+  object-fit: cover;
+}
+
+.template-card h3 {
+  margin-top: 0;
+  margin-bottom: 8px;
+  font-size: 22px;
+  font-weight: 600;
+  letter-spacing: -0.44px;
+}
+
+.template-card p {
+  color: var(--palette-text-secondary);
+  min-height: 64px;
+  font-size: 14px;
+  line-height: 1.43;
+}

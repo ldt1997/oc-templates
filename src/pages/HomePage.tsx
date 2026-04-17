@@ -1,5 +1,6 @@
 import { templates } from '../data/templates';
 import { TemplateCard } from '../components/template/TemplateCard';
+import './HomePage.css';
 
 export function HomePage() {
   return (
