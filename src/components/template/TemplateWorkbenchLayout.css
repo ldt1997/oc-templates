@@ -1,7 +1,7 @@
 .template-workbench {
   position: relative;
   display: flex;
-  gap: 18px;
+  gap: 20px;
   align-items: stretch;
   --panel-width: 390px;
 }
@@ -54,33 +54,49 @@
 }
 
 @media (max-width: 960px) {
+  /* 移动端：上下布局，垂直间隔 */
   .template-workbench {
     flex-direction: column;
-    gap: 14px;
+    gap: 16px;
   }
 
   .workbench-panel {
-    width: 100%;
+    width: 100% !important;
+    height: auto;
+    transition: max-height 0.32s ease, opacity 0.22s ease, margin-bottom 0.32s ease;
   }
 
+  /* 移动端上下收起：改为 max-height 和 margin-bottom */
   .template-workbench.is-collapsed .workbench-panel {
-    height: 0;
-    width: 100%;
+    max-height: 0;
     opacity: 0;
-    transform: translateY(-10px);
+    margin-bottom: 0;
+    overflow: hidden;
+    pointer-events: none;
   }
 
   .workbench-toggle {
-    top: 12px;
-    left: auto;
-    right: 12px;
+    position: static;
     transform: none;
     width: 40px;
     height: 40px;
+    margin-bottom: 4px;
+    align-self: flex-start;
+    z-index: 3;
+    background: var(--palette-surface);
+    border-radius: 8px;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 
   .template-workbench.is-collapsed .workbench-toggle {
     left: auto;
-    right: 12px;
+    right: auto;
+  }
+
+  .workbench-toggle:hover {
+    background: var(--palette-surface-muted);
   }
 }

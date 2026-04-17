@@ -21,7 +21,6 @@ export function TemplateWorkbenchLayout({
       className={`template-workbench ${collapsed ? 'is-collapsed' : ''}`}
       style={{ '--panel-width': collapsed ? '0px' : '390px' } as CSSProperties}
     >
-      <aside className="workbench-panel">{panel}</aside>
       <Button
         className="workbench-toggle"
         type="text"
@@ -29,6 +28,7 @@ export function TemplateWorkbenchLayout({
         icon={collapsed ? <RightOutlined /> : <LeftOutlined />}
         onClick={onToggleCollapsed}
       />
+      <aside className="workbench-panel">{panel}</aside>
       <article className="workbench-preview">{preview}</article>
     </section>
   );
