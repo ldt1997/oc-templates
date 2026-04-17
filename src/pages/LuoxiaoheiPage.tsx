@@ -1,16 +1,19 @@
-import { useMemo, useState, type CSSProperties, useEffect } from 'react';
+import { useMemo, useRef, useState, type CSSProperties, useEffect } from 'react';
 import {
   Card,
   ColorPicker,
   Form,
   Input,
+  Button,
   Slider,
   Typography,
   Upload,
+  message,
   type UploadFile,
   type UploadProps,
 } from 'antd';
-import { InboxOutlined } from '@ant-design/icons';
+import { DownloadOutlined, InboxOutlined } from '@ant-design/icons';
+import { toPng } from 'html-to-image';
 import { TemplateWorkbenchLayout } from '../components/template/TemplateWorkbenchLayout';
 
 const { Dragger } = Upload;
@@ -23,6 +26,8 @@ export function LuoxiaoheiPage() {
   const [split, setSplit] = useState(46);
   const [scale, setScale] = useState(1);
   const [imageUrl, setImageUrl] = useState<string>('');
+  const [panelCollapsed, setPanelCollapsed] = useState(false);
+  const posterRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     return () => {
@@ -56,55 +61,103 @@ export function LuoxiaoheiPage() {
     [imageUrl, primaryColor, scale, secondaryColor, split],
   ) as CSSProperties;
 
+  async function handleExport() {
+    if (!posterRef.current) {
+      message.error('预览区域尚未准备好');
+      return;
+    }
+
+    try {
+      const dataUrl = await toPng(posterRef.current, {
+        cacheBust: true,
+        pixelRatio: 2,
+        backgroundColor: '#ffffff',
+      });
+
+      const link = document.createElement('a');
+      link.download = 'luoxiaohei-poster.png';
+      link.href = dataUrl;
+      link.click();
+    } catch {
+      message.error('导出失败，请重试');
+    }
+  }
+
   const panel = (
     <Card className="control-card" bordered={false}>
-      <Typography.Title level={4}>模板参数</Typography.Title>
-      <Form layout="vertical" requiredMark={false}>
-        <Form.Item label="主标题">
-          <Input value={title} onChange={(e) => setTitle(e.target.value)} />
-        </Form.Item>
-        <Form.Item label="副标题">
-          <Input value={subtitle} onChange={(e) => setSubtitle(e.target.value)} />
-        </Form.Item>
-        <Form.Item label="上传人物图片">
-          <Dragger {...uploadProps}>
-            <p className="ant-upload-drag-icon">
-              <InboxOutlined />
-            </p>
-            <p>点击或拖拽上传</p>
-          </Dragger>
-        </Form.Item>
-        <Form.Item label="主色">
-          <ColorPicker value={primaryColor} onChange={(c) => setPrimaryColor(c.toHexString())} showText />
-        </Form.Item>
-        <Form.Item label="辅色">
-          <ColorPicker
-            value={secondaryColor}
-            onChange={(c) => setSecondaryColor(c.toHexString())}
-            showText
-          />
-        </Form.Item>
-        <Form.Item label="双色分割比例">
-          <Slider min={20} max={80} value={split} onChange={setSplit} />
-        </Form.Item>
-        <Form.Item label="人物缩放">
-          <Slider min={0.7} max={1.3} step={0.01} value={scale} onChange={setScale} />
-        </Form.Item>
-      </Form>
+      <div className="panel-head">
+        <div>
+          <Typography.Title level={4}>罗小黑人物双色海报</Typography.Title>
+          <Typography.Paragraph className="panel-desc">
+            上传图片后，调整双色分割、标题与缩放比例，实时查看最终画面。
+          </Typography.Paragraph>
+        </div>
+      </div>
+
+      {!panelCollapsed ? (
+        <div className="panel-scroll">
+          <Form layout="vertical" requiredMark={false}>
+            <Form.Item label="主标题">
+              <Input value={title} onChange={(e) => setTitle(e.target.value)} />
+            </Form.Item>
+            <Form.Item label="副标题">
+              <Input value={subtitle} onChange={(e) => setSubtitle(e.target.value)} />
+            </Form.Item>
+            <Form.Item label="上传人物图片">
+              <Dragger {...uploadProps}>
+                <p className="ant-upload-drag-icon">
+                  <InboxOutlined />
+                </p>
+                <p>点击或拖拽上传</p>
+              </Dragger>
+            </Form.Item>
+            <Form.Item label="主色">
+              <ColorPicker value={primaryColor} onChange={(c) => setPrimaryColor(c.toHexString())} showText />
+            </Form.Item>
+            <Form.Item label="辅色">
+              <ColorPicker
+                value={secondaryColor}
+                onChange={(c) => setSecondaryColor(c.toHexString())}
+                showText
+              />
+            </Form.Item>
+            <Form.Item label="双色分割比例">
+              <Slider min={20} max={80} value={split} onChange={setSplit} />
+            </Form.Item>
+            <Form.Item label="人物缩放">
+              <Slider min={0.7} max={1.3} step={0.01} value={scale} onChange={setScale} />
+            </Form.Item>
+          </Form>
+        </div>
+      ) : null}
     </Card>
   );
 
   const preview = (
-    <div className="poster-shell">
-      <div className="two-tone-poster" style={posterStyle}>
-        <div className="poster-overlay" />
-        <div className="poster-text">
-          <h2>{title}</h2>
-          <p>{subtitle}</p>
+    <div className="preview-column">
+      <div className="preview-toolbar">
+        <Button type="primary" icon={<DownloadOutlined />} onClick={handleExport}>
+          导出图片
+        </Button>
+      </div>
+      <div ref={posterRef} className="poster-shell">
+        <div className="two-tone-poster" style={posterStyle}>
+          <div className="poster-overlay" />
+          <div className="poster-text">
+            <h2>{title}</h2>
+            <p>{subtitle}</p>
+          </div>
         </div>
       </div>
     </div>
   );
 
-  return <TemplateWorkbenchLayout panel={panel} preview={preview} />;
+  return (
+    <TemplateWorkbenchLayout
+      panel={panel}
+      preview={preview}
+      collapsed={panelCollapsed}
+      onToggleCollapsed={() => setPanelCollapsed((value) => !value)}
+    />
+  );
 }

@@ -51,7 +51,7 @@ body {
   max-width: 1680px;
   margin: 0 auto;
   min-height: 100vh;
-  padding: 16px 24px 32px;
+  padding: 12px 20px 28px;
 }
 
 .top-nav {
@@ -59,12 +59,11 @@ body {
   top: 0;
   z-index: 10;
   display: flex;
-  gap: 16px;
+  gap: 12px;
   justify-content: space-between;
   align-items: center;
-  padding: 12px 0;
+  padding: 10px 0;
   background: var(--palette-surface);
-  border-bottom: 1px solid color-mix(in srgb, var(--palette-border), transparent 35%);
 }
 
 .brand {
@@ -75,109 +74,29 @@ body {
   font-size: 24px;
 }
 
-.search-pill {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 12px;
-  padding: 10px 16px;
-  min-width: 280px;
-  border-radius: 999px;
-  background: var(--palette-surface);
-  box-shadow: var(--shadow-card);
-  font-size: 14px;
-  color: var(--palette-text-primary);
-}
-
-.search-pill-sep {
-  width: 1px;
-  height: 16px;
-  background: color-mix(in srgb, var(--palette-border), transparent 20%);
-}
-
 .top-nav-right {
   display: flex;
   align-items: center;
   gap: 12px;
 }
 
-.host-link {
-  color: var(--palette-text-primary);
-  font-size: 14px;
-  font-weight: 600;
-}
-
 .page-content {
   margin-top: 24px;
 }
 
-.hero-block {
-  background: var(--palette-surface);
-  border-radius: 32px;
-  padding: clamp(20px, 4vw, 44px);
-  box-shadow: var(--shadow-card);
-}
-
-.eyebrow {
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  font-size: 11px;
-  font-weight: 700;
-  color: var(--palette-text-secondary);
-  margin: 0;
-}
-
-.hero-block h1 {
-  margin: 12px 0;
-  max-width: 840px;
-  font-size: clamp(30px, 4vw, 52px);
-  font-weight: 700;
-  line-height: 1.08;
-  letter-spacing: -0.44px;
-}
-
-.hero-desc {
-  margin: 0;
-  font-size: clamp(14px, 2vw, 16px);
-  color: var(--palette-text-secondary);
-  max-width: 760px;
-}
-
-.category-strip {
-  margin-top: 16px;
-  display: flex;
-  gap: 10px;
-  overflow-x: auto;
-  padding-bottom: 4px;
-  scrollbar-width: thin;
-}
-
-.category-pill {
-  border: 0;
-  border-bottom: 2px solid transparent;
-  background: transparent;
-  color: var(--palette-text-secondary);
-  padding: 8px 4px;
-  font-size: 14px;
-  font-weight: 600;
-  white-space: nowrap;
-  cursor: pointer;
-}
-
-.category-pill.active {
-  color: var(--palette-text-primary);
-  border-bottom-color: var(--palette-text-primary);
+.home-page {
+  padding-inline: 12px;
 }
 
 .template-grid {
-  margin-top: 18px;
+  margin-top: 0;
   display: grid;
-  gap: 20px;
+  gap: 16px;
   grid-template-columns: repeat(5, minmax(0, 1fr));
 }
 
 .template-card {
-  border-radius: 20px !important;
+  border-radius: 16px !important;
   overflow: hidden;
   box-shadow: var(--shadow-card);
   transition: transform 0.2s ease, box-shadow 0.2s ease;
@@ -190,7 +109,7 @@ body {
 
 .template-card img {
   width: 100%;
-  aspect-ratio: 16 / 10;
+  aspect-ratio: 3 / 4;
   object-fit: cover;
 }
 
@@ -209,17 +128,12 @@ body {
   line-height: 1.43;
 }
 
-.template-tags {
-  margin: 10px 0 14px;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-}
-
 .template-workbench {
-  display: grid;
-  grid-template-columns: minmax(300px, 390px) 1fr;
-  gap: 22px;
+  position: relative;
+  display: flex;
+  gap: 18px;
+  align-items: stretch;
+  --panel-width: 390px;
 }
 
 .workbench-panel,
@@ -227,17 +141,94 @@ body {
   min-width: 0;
 }
 
+.workbench-panel {
+  flex: 0 0 auto;
+  width: var(--panel-width);
+  overflow: hidden;
+  transition: width 0.32s ease, opacity 0.22s ease, transform 0.32s ease;
+}
+
+.template-workbench.is-collapsed .workbench-panel {
+  width: 0;
+  opacity: 0;
+  transform: translateX(-10px);
+  pointer-events: none;
+}
+
+.workbench-preview {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.workbench-toggle {
+  position: absolute;
+  top: 50%;
+  left: calc(var(--panel-width) - 18px);
+  z-index: 3;
+  width: 36px;
+  height: 72px;
+  padding: 0;
+  border-radius: 999px;
+  background: var(--palette-surface);
+  box-shadow: var(--shadow-card);
+  transform: translateY(-50%);
+  transition: left 0.32s ease, background-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.template-workbench.is-collapsed .workbench-toggle {
+  left: 10px;
+}
+
+.workbench-toggle:hover {
+  background: var(--palette-surface-muted);
+}
+
 .control-card {
-  border-radius: 20px !important;
+  position: relative;
+  border-radius: 18px !important;
   box-shadow: var(--shadow-card);
 }
 
+.panel-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.panel-head .ant-typography {
+  margin-bottom: 4px;
+}
+
+.panel-desc {
+  margin: 0;
+  color: var(--palette-text-secondary);
+  font-size: 14px;
+}
+
+.panel-scroll {
+  max-height: calc(100vh - 210px);
+  overflow: auto;
+  padding-right: 4px;
+}
+
+.preview-column {
+  position: relative;
+}
+
+.preview-toolbar {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 12px;
+}
+
 .poster-shell {
-  border-radius: 32px;
+  border-radius: 22px;
   min-height: 620px;
-  padding: clamp(12px, 3vw, 24px);
-  box-shadow: var(--shadow-card);
-  background: var(--palette-surface);
+  padding: 0;
+  box-shadow: none;
+  background: transparent;
 }
 
 .two-tone-poster {
@@ -245,7 +236,7 @@ body {
   height: min(72vh, 800px);
   border-radius: 20px;
   overflow: hidden;
-  border: 1px solid color-mix(in srgb, var(--palette-border), transparent 20%);
+  border: 0;
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
@@ -347,7 +338,8 @@ body {
   }
 
   .template-workbench {
-    grid-template-columns: 1fr;
+    flex-direction: column;
+    gap: 14px;
   }
 
   .top-nav {
@@ -372,6 +364,45 @@ body {
     gap: 14px;
   }
 
+  .home-page {
+    padding-inline: 8px;
+  }
+
+  .preview-toolbar {
+    justify-content: flex-start;
+    margin-top: 12px;
+    margin-bottom: 0;
+  }
+
+  .panel-scroll {
+    max-height: none;
+  }
+
+  .workbench-panel {
+    width: 100%;
+  }
+
+  .template-workbench.is-collapsed .workbench-panel {
+    height: 0;
+    width: 100%;
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+
+  .workbench-toggle {
+    top: 12px;
+    left: auto;
+    right: 12px;
+    transform: none;
+    width: 40px;
+    height: 40px;
+  }
+
+  .template-workbench.is-collapsed .workbench-toggle {
+    left: auto;
+    right: 12px;
+  }
+
   .poster-shell {
     min-height: 380px;
   }
@@ -388,6 +419,17 @@ body {
 
   .brand {
     font-size: 20px;
+  }
+}
+
+@media (max-width: 960px) {
+  .preview-column {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .preview-toolbar {
+    order: 2;
   }
 }
 
