@@ -17,9 +17,9 @@ const { Dragger } = Upload;
 
 export function LuoxiaoheiPage() {
   const [title, setTitle] = useState('罗小黑 · 双色人像海报');
-  const [subtitle, setSubtitle] = useState('YOUR STORY, IN TWO TONES');
-  const [primaryColor, setPrimaryColor] = useState('#02492a');
-  const [secondaryColor, setSecondaryColor] = useState('#f8cc65');
+  const [subtitle, setSubtitle] = useState('LIVE ANYWHERE, DESIGN EVERYWHERE');
+  const [primaryColor, setPrimaryColor] = useState('#ff385c');
+  const [secondaryColor, setSecondaryColor] = useState('#222222');
   const [split, setSplit] = useState(46);
   const [scale, setScale] = useState(1);
   const [imageUrl, setImageUrl] = useState<string>('');

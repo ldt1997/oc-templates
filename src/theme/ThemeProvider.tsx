@@ -36,10 +36,10 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
           algorithm:
             mode === 'dark' ? antdTheme.darkAlgorithm : antdTheme.defaultAlgorithm,
           token: {
-            colorPrimary: '#078a52',
-            borderRadius: 14,
+            colorPrimary: '#ff385c',
+            borderRadius: 20,
             fontFamily:
-              '"Avenir Next", "Poppins", "Helvetica Neue", "PingFang SC", "Microsoft YaHei", sans-serif',
+              '"Airbnb Cereal VF", Circular, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", "PingFang SC", "Microsoft YaHei", sans-serif',
           },
         }}
       >

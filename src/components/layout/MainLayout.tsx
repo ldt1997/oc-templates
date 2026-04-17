@@ -17,8 +17,13 @@ export function MainLayout() {
         <Link className="brand" to="/">
           PhotoForge
         </Link>
+        <div className="search-pill" role="status" aria-live="polite">
+          <span>模板浏览</span>
+          <span className="search-pill-sep" />
+          <span>{title}</span>
+        </div>
         <div className="top-nav-right">
-          <span className="current-page">{title}</span>
+          <span className="host-link">Become a Creator</span>
           <ThemeToggle />
           <Link to="/">
             <Button type="default">全部模板</Button>
