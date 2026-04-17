@@ -2,8 +2,8 @@ import { useState, useRef } from 'react';
 import { Card, Button, Typography, message } from 'antd';
 import { DownloadOutlined } from '@ant-design/icons';
 import { toPng } from 'html-to-image';
-import { TemplateWorkbenchLayout } from '../components/template/TemplateWorkbenchLayout';
-import './TemplatePage.css';
+import { TemplateWorkbenchLayout } from '../../components/template/TemplateWorkbenchLayout';
+import '../TemplatePage.css';
 
 export function LuoxiaoheiPage() {
   const [panelCollapsed, setPanelCollapsed] = useState(false);
