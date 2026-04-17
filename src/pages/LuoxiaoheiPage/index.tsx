@@ -1,9 +1,9 @@
-import { useMemo, useRef, useState, type CSSProperties } from 'react';
+import { useRef, useState } from 'react';
 import { Card, ColorPicker, Form, Input, Button, Slider, Typography, Upload, message, type UploadFile, type UploadProps } from 'antd';
 import { DownloadOutlined, InboxOutlined } from '@ant-design/icons';
 import { toPng } from 'html-to-image';
 import { TemplateWorkbenchLayout } from '../../components/template/TemplateWorkbenchLayout';
-import { getRgbString, hexToRgb } from '../../utils/colorConverter';
+import { getRgbString } from '../../utils/colorConverter';
 import '../TemplatePage.css';
 import './LuoxiaoheiPage.css';
 
@@ -59,30 +59,6 @@ export function LuoxiaoheiPage() {
       message.error('导出失败，请重试');
     }
   }
-
-  // 计算渐变背景样式
-  const gradientStyle = useMemo(() => {
-    return {
-      background: `linear-gradient(to bottom, ${bgColor1}, ${bgColor1}, white), 
-                 linear-gradient(to bottom, ${bgColor2}, ${bgColor2}, white)`,
-      backgroundSize: '50% 100%, 50% 100%',
-      backgroundPosition: '0 0, 50% 0',
-      backgroundRepeat: 'no-repeat',
-    };
-  }, [bgColor1, bgColor2]);
-
-  // Logo 颜色过滤器（用 CSS filter 实现着色）
-  const logoFilterStyle = useMemo(() => {
-    const rgb = hexToRgb(logoColor);
-    if (!rgb) return {};
-    
-    // 简化：将logo应用颜色，通过mix-blend-mode或filter
-    // 这里用 filter 的 hue-rotate 和 saturate，实际可能需要调整
-    return {
-      filter: `brightness(0) saturate(100%) invert(1) sepia(1) saturate(2) hue-rotate(0deg)`,
-      mixBlendMode: 'multiply' as const,
-    };
-  }, [logoColor]);
 
   // 参数面板
   const panel = (
@@ -182,7 +158,16 @@ export function LuoxiaoheiPage() {
         {/* 1. 白色背景 - 默认 */}
 
         {/* 2. 双色渐变背景 */}
-        <div className="luoxiaohei-bg" style={gradientStyle as CSSProperties} />
+        <div className="luoxiaohei-bg">
+          <div
+            className="luoxiaohei-bg-left"
+            style={{ background: `linear-gradient(to bottom, ${bgColor1} 0%, ${bgColor1} 38%, #ffffff 100%)` }}
+          />
+          <div
+            className="luoxiaohei-bg-right"
+            style={{ background: `linear-gradient(to bottom, ${bgColor2} 0%, ${bgColor2} 38%, #ffffff 100%)` }}
+          />
+        </div>
 
         {/* 3. 竹子素材层 */}
         <div
@@ -223,11 +208,10 @@ export function LuoxiaoheiPage() {
         )}
 
         {/* 6. Logo */}
-        <img
-          src="/templates/luoxiaohei/photos/luoxiaoheilogo.png"
-          alt="logo"
-          className="luoxiaohei-logo"
-          style={logoFilterStyle}
+        <div
+          aria-label="logo"
+          className="luoxiaohei-logo luoxiaohei-logo-mask"
+          style={{ backgroundColor: logoColor }}
         />
       </div>
     </div>

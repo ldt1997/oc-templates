@@ -17,13 +17,23 @@
 .luoxiaohei-bg {
   position: absolute;
   inset: 0;
-  display: flex;
+  z-index: 0;
 }
 
 .luoxiaohei-bg-left,
 .luoxiaohei-bg-right {
-  flex: 1;
-  min-height: 100%;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 50%;
+}
+
+.luoxiaohei-bg-left {
+  left: 0;
+}
+
+.luoxiaohei-bg-right {
+  right: 0;
 }
 
 /* 2. 竹子素材层 */
@@ -34,6 +44,7 @@
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
+  z-index: 1;
 }
 
 /* 3. 文字块 */
@@ -57,10 +68,12 @@
   font-size: 8em;
   font-weight: bold;
   writing-mode: vertical-rl;
-  text-orientation: mixed;
-  letter-spacing: 0.8em;
+  text-orientation: upright;
+  letter-spacing: 0.1rem;
   line-height: 1;
-  margin-bottom: 1.2em;
+  margin-bottom: 0.8em;
+  white-space: nowrap;
+  word-break: keep-all;
 }
 
 .luoxiaohei-text-small {
@@ -88,8 +101,19 @@
   left: 50%;
   transform: translateX(-50%);
   z-index: 4;
+  width: 38em;
   height: 8em;
-  object-fit: contain;
+}
+
+.luoxiaohei-logo-mask {
+  -webkit-mask-image: url('/templates/luoxiaohei/photos/luoxiaoheilogo.png');
+  mask-image: url('/templates/luoxiaohei/photos/luoxiaoheilogo.png');
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  mask-position: center;
+  -webkit-mask-size: contain;
+  mask-size: contain;
 }
 
 /* 响应式缩放 */
