@@ -1,0 +1,99 @@
+/* Luoxiaohei 模板特定样式 */
+
+.luoxiaohei-canvas {
+  position: relative;
+  width: 1080px;
+  height: 1920px;
+  background: white;
+  overflow: hidden;
+  border-radius: 20px;
+  margin: 0 auto;
+}
+
+/* 1. 背景层 */
+.luoxiaohei-bg {
+  position: absolute;
+  inset: 0;
+  display: flex;
+}
+
+.luoxiaohei-bg-left,
+.luoxiaohei-bg-right {
+  flex: 1;
+  min-height: 100%;
+}
+
+/* 2. 竹子素材层 */
+.luoxiaohei-bamboo {
+  position: absolute;
+  inset: 0;
+  opacity: 0.5;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+/* 3. 文字块 */
+.luoxiaohei-text-block {
+  position: absolute;
+  top: 0;
+  padding: 20px;
+  z-index: 2;
+  font-family: 'YuanGuSongTi-F', serif;
+}
+
+.luoxiaohei-text-left {
+  left: 0;
+}
+
+.luoxiaohei-text-right {
+  right: 0;
+}
+
+.luoxiaohei-title {
+  font-size: 80px;
+  font-weight: bold;
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+  letter-spacing: 8px;
+  line-height: 1;
+  margin-bottom: 12px;
+}
+
+.luoxiaohei-text-small {
+  font-size: 12px;
+  line-height: 1.6;
+  font-family: 'Monaco', 'Menlo', monospace;
+}
+
+/* 5. 用户图片层 */
+.luoxiaohei-user-image {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 3;
+  max-width: 80%;
+  max-height: 80%;
+  object-fit: contain;
+}
+
+/* 6. Logo 层 */
+.luoxiaohei-logo {
+  position: absolute;
+  bottom: 40px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 4;
+  height: 80px;
+  object-fit: contain;
+}
+
+/* 响应式缩放 */
+@media (max-width: 960px) {
+  .luoxiaohei-canvas {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 1080 / 1920;
+  }
+}
