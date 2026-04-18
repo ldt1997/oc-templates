@@ -43,6 +43,7 @@ export function LuoxiaoheiPage() {
   const [userImage, setUserImage] = useState<string>("");
   const [imageScale, setImageScale] = useState(1);
   const [canvasScale, setCanvasScale] = useState(1);
+  const [canvasBaseFontSize, setCanvasBaseFontSize] = useState(10);
   const [palette, setPalette] = useState<PaletteColor[]>([]);
   const [colorPairs, setColorPairs] = useState<ColorPair[]>([]);
   const [selectedPairId, setSelectedPairId] = useState<string>("");
@@ -89,6 +90,39 @@ export function LuoxiaoheiPage() {
       }
     };
   }, [userImage]);
+
+  useEffect(() => {
+    const canvasElement = canvasRef.current;
+    if (!canvasElement) {
+      return;
+    }
+
+    function updateBaseFontSize(width: number) {
+      const nextSize = Math.max(width / 108, 1);
+      setCanvasBaseFontSize((current) =>
+        Math.abs(current - nextSize) > 0.02 ? nextSize : current,
+      );
+    }
+
+    updateBaseFontSize(canvasElement.getBoundingClientRect().width);
+
+    if (typeof ResizeObserver === "undefined") {
+      return;
+    }
+
+    const observer = new ResizeObserver((entries) => {
+      const entry = entries[0];
+      if (!entry) {
+        return;
+      }
+      updateBaseFontSize(entry.contentRect.width);
+    });
+
+    observer.observe(canvasElement);
+    return () => {
+      observer.disconnect();
+    };
+  }, []);
 
   async function applyColorPairsFromImage(imageUrl: string) {
     const pairs = await buildColorPairsFromImage(imageUrl, palette, 3);
@@ -339,6 +373,7 @@ export function LuoxiaoheiPage() {
           transform: `scale(${canvasScale})`,
           transformOrigin: "top center",
           transition: "transform 0.2s ease",
+          fontSize: `${canvasBaseFontSize}px`,
         }}
       >
         {/* 1. 白色背景 - 默认 */}
