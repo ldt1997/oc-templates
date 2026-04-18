@@ -56,6 +56,7 @@ export function LuoxiaoheiPage() {
   const [logoColor, setLogoColor] = useState("#690f11");
   const [title1, setTitle1] = useState("朝");
   const [title2, setTitle2] = useState("晚");
+  const [name, setName] = useState("名称");
   const [userImage, setUserImage] = useState<string>("");
   const [imageScale, setImageScale] = useState(1.2);
   const [canvasScale, setCanvasScale] = useState(1);
@@ -307,6 +308,15 @@ export function LuoxiaoheiPage() {
               />
             </Form.Item>
 
+            <Form.Item label="人物名称">
+              <Input
+                maxLength={10}
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                placeholder="十个汉字以内"
+              />
+            </Form.Item>
+
             <Form.Item label="Logo 颜色">
               <ColorPicker
                 value={logoColor}
@@ -446,6 +456,10 @@ export function LuoxiaoheiPage() {
             className="luoxiaohei-logo luoxiaohei-logo-mask"
             style={{ backgroundColor: logoColor }}
           />
+
+          <div className="luoxiaohei-name-frame" aria-label="人物名称">
+            <div className="luoxiaohei-name-text">{name}</div>
+          </div>
         </div>
       </div>
     </div>

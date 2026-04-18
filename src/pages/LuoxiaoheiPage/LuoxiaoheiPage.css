@@ -185,6 +185,36 @@
   mask-size: contain;
 }
 
+.luoxiaohei-name-frame {
+  position: absolute;
+  top: 55%;
+  left: 85%;
+  width: fit-content;
+  height: auto;
+  padding: 1em 1.5em;
+  z-index: 5;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 3em solid transparent;
+  border-image-source: url('/templates/luoxiaohei/photos/nameframe.svg');
+  border-image-slice: 80;
+  border-image-width: 5em;
+  border-image-repeat: stretch;
+}
+
+.luoxiaohei-name-text {
+  font-family: 'YuanGuSongTi-F', serif;
+  font-weight: lighter;
+  font-size: 5em;
+  line-height: 1;
+  writing-mode: vertical-rl;
+  letter-spacing: 0.3em;
+  text-orientation: upright;
+  white-space: nowrap;
+}
+
 /* 响应式缩放 */
 @media (max-width: 960px) {
   .luoxiaohei-canvas {
