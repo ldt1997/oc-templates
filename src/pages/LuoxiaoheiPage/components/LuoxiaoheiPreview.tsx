@@ -16,6 +16,7 @@ interface LuoxiaoheiPreviewProps {
   userImage: string;
   imageScale: number;
   logoColor: string;
+  isMobileMode: boolean;
   name: string;
 }
 
@@ -32,6 +33,7 @@ export function LuoxiaoheiPreview({
   userImage,
   imageScale,
   logoColor,
+  isMobileMode,
   name,
 }: LuoxiaoheiPreviewProps) {
   return (
@@ -133,11 +135,23 @@ export function LuoxiaoheiPreview({
             />
           )}
 
-          <div
-            aria-label="logo"
-            className="luoxiaohei-logo luoxiaohei-logo-mask"
-            style={{ backgroundColor: logoColor }}
-          />
+          {isMobileMode ? (
+            <div aria-label="logo" className="luoxiaohei-logo">
+              <img
+                className="luoxiaohei-logo-image"
+                src="/templates/luoxiaohei/photos/luoxiaoheilogo.png"
+                alt=""
+                aria-hidden="true"
+                draggable={false}
+              />
+            </div>
+          ) : (
+            <div
+              aria-label="logo"
+              className="luoxiaohei-logo luoxiaohei-logo-mask"
+              style={{ backgroundColor: logoColor }}
+            />
+          )}
 
           <div className="luoxiaohei-name-frame" aria-label="人物名称">
             <img

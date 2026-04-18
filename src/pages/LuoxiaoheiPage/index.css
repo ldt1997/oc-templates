@@ -192,6 +192,13 @@
   mask-size: contain;
 }
 
+.luoxiaohei-logo-image {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: contain;
+}
+
 .luoxiaohei-name-frame {
   position: absolute;
   top: 60%;

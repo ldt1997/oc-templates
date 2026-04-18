@@ -35,6 +35,7 @@ interface LuoxiaoheiControlPanelProps {
   onNameChange: (value: string) => void;
   logoColor: string;
   onLogoColorChange: (value: string) => void;
+  isMobileMode: boolean;
   onTogglePanel: () => void;
   templateMeta?: TemplateMeta;
 }
@@ -59,6 +60,7 @@ export function LuoxiaoheiControlPanel({
   onNameChange,
   logoColor,
   onLogoColorChange,
+  isMobileMode,
   onTogglePanel,
   templateMeta,
 }: LuoxiaoheiControlPanelProps) {
@@ -181,13 +183,15 @@ export function LuoxiaoheiControlPanel({
               />
             </Form.Item>
 
-            <Form.Item label="Logo 颜色">
-              <ColorPicker
-                value={logoColor}
-                onChange={(c) => onLogoColorChange(c.toHexString())}
-                showText
-              />
-            </Form.Item>
+            {!isMobileMode ? (
+              <Form.Item label="Logo 颜色">
+                <ColorPicker
+                  value={logoColor}
+                  onChange={(c) => onLogoColorChange(c.toHexString())}
+                  showText
+                />
+              </Form.Item>
+            ) : null}
           </Form>
         </div>
       ) : null}
