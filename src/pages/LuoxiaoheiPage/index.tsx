@@ -18,9 +18,9 @@ import {
   LeftOutlined,
   RightOutlined,
 } from "@ant-design/icons";
-import { toPng } from "html-to-image";
 import { TemplateWorkbenchLayout } from "../../components/template/TemplateWorkbenchLayout";
 import { getRgbString } from "../../utils/colorConverter";
+import { exportElementAsPng } from "../../utils/exportImage";
 import {
   buildColorPairsFromImage,
   hexToRgbTuple,
@@ -173,50 +173,20 @@ export function LuoxiaoheiPage() {
       return;
     }
 
-    const canvasNode = canvasRef.current;
-    const previousStyle = {
-      width: canvasNode.style.width,
-      height: canvasNode.style.height,
-      maxWidth: canvasNode.style.maxWidth,
-      aspectRatio: canvasNode.style.aspectRatio,
-      borderRadius: canvasNode.style.borderRadius,
-      transform: canvasNode.style.transform,
-      fontSize: canvasNode.style.fontSize,
-    };
-
     try {
-      // Export with a deterministic 1080x1920 layout to avoid viewport-dependent sizing.
-      canvasNode.style.width = "1080px";
-      canvasNode.style.height = "1920px";
-      canvasNode.style.maxWidth = "none";
-      canvasNode.style.aspectRatio = "auto";
-      canvasNode.style.borderRadius = "0";
-      canvasNode.style.transform = "none";
-      canvasNode.style.fontSize = "10px";
-
-      const dataUrl = await toPng(canvasNode, {
-        cacheBust: true,
-        pixelRatio: 1,
-        backgroundColor: "#ffffff",
+      await exportElementAsPng(canvasRef.current, {
+        fileName: "luoxiaohei-poster.png",
         width: 1080,
         height: 1920,
+        backgroundColor: "#ffffff",
+        pixelRatio: 1,
+        styleOverride: {
+          fontSize: "10px",
+        },
       });
-
-      const link = document.createElement("a");
-      link.download = "luoxiaohei-poster.png";
-      link.href = dataUrl;
-      link.click();
     } catch (error) {
       console.error("图片导出失败", error);
       message.error("导出失败，请重试");
-    } finally {
-      canvasNode.style.width = previousStyle.width;
-      canvasNode.style.height = previousStyle.height;
-      canvasNode.style.maxWidth = previousStyle.maxWidth;
-      canvasNode.style.aspectRatio = previousStyle.aspectRatio;
-      canvasNode.style.borderRadius = previousStyle.borderRadius;
-      canvasNode.style.transform = previousStyle.transform;
-      canvasNode.style.fontSize = previousStyle.fontSize;
     }
   }
 
