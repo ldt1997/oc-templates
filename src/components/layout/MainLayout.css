@@ -41,14 +41,16 @@
   }
 
   .top-nav {
-    flex-wrap: wrap;
-    gap: 10px;
+    flex-wrap: nowrap;
+    gap: 12px;
     padding-top: 8px;
+    justify-content: space-between;
   }
 
   .top-nav-right {
-    width: 100%;
-    justify-content: space-between;
+    width: auto;
+    justify-content: flex-end;
+    flex-shrink: 0;
   }
 }
 
