@@ -1,7 +1,7 @@
 import type { RefObject } from "react";
 import { Button, Slider } from "antd";
 import { DownloadOutlined } from "@ant-design/icons";
-import { getRgbString } from "../../../utils/colorConverter";
+import { getRgbString } from "@/utils/colorConverter";
 
 interface LuoxiaoheiPreviewProps {
   canvasRef: RefObject<HTMLDivElement | null>;

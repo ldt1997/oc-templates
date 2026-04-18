@@ -1,6 +1,6 @@
 import { Suspense, lazy } from 'react';
 import { Navigate, Route, Routes } from 'react-router-dom';
-import { MainLayout } from './components/layout/MainLayout';
+import { MainLayout } from '@/components/layout/MainLayout';
 
 const HomePage = lazy(() => import('./pages/HomePage').then((m) => ({ default: m.HomePage })));
 const LuoxiaoheiPage = lazy(() =>

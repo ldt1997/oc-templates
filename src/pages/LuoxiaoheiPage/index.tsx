@@ -1,8 +1,8 @@
 import { useEffect, useRef, useState } from "react";
 import { message, type UploadFile, type UploadProps } from "antd";
-import { TemplateWorkbenchLayout } from "../../components/template/TemplateWorkbenchLayout";
-import { exportElementAsPng } from "../../utils/exportImage";
-import { templates } from "../../data/templates";
+import { TemplateWorkbenchLayout } from "@/components/template/TemplateWorkbenchLayout";
+import { exportElementAsPng } from "@/utils/exportImage";
+import { templates } from "@/data/templates";
 import {
   buildColorPairsFromImage,
   hexToRgbTuple,

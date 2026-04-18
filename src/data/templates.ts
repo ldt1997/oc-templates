@@ -1,4 +1,4 @@
-import type { TemplateMeta } from '../types/template';
+import type { TemplateMeta } from '@/types/template';
 
 export const templates: TemplateMeta[] = [
   {
@@ -7,7 +7,7 @@ export const templates: TemplateMeta[] = [
     description:
       '自动提取主题双色，一键生成风格统一的视觉海报。',
     cover:
-      '/templates/luoxiaohei/photos/sample.png',
+      '/templates/luoxiaohei/photos/sample.webp',
     route: '/luoxiaohei',
     tags: ['海报', '人物', '双色'],
   }

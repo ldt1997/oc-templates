@@ -11,7 +11,7 @@ import {
 } from "antd";
 import { InboxOutlined, LeftOutlined, RightOutlined } from "@ant-design/icons";
 import type { ColorPair } from "./colorRecommendation";
-import type { TemplateMeta } from "../../../types/template";
+import type { TemplateMeta } from "@/types/template";
 
 const { Dragger } = Upload;
 

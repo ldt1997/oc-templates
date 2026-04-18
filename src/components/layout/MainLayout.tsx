@@ -1,5 +1,5 @@
 import { Link, Outlet } from 'react-router-dom';
-import { ThemeToggle } from '../common/ThemeToggle';
+import { ThemeToggle } from '@/components/common/ThemeToggle';
 import './MainLayout.css';
 
 export function MainLayout() {

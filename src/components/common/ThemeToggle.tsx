@@ -1,6 +1,6 @@
 import { Segmented } from 'antd';
 import { MoonOutlined, SunOutlined } from '@ant-design/icons';
-import { useThemeMode } from '../../theme/theme-state';
+import { useThemeMode } from '@/theme/theme-state';
 
 export function ThemeToggle() {
   const { mode, toggleMode } = useThemeMode();
