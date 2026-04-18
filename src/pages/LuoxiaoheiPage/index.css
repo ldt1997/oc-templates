@@ -60,25 +60,6 @@
   font-family: 'YuanGuSongTi-F', serif;
 }
 
-.luoxiaohei-panel-title-row {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 0.8rem;
-}
-
-.luoxiaohei-panel-toggle {
-  width: 2rem;
-  height: 2rem;
-  border-radius: 999px;
-  color: var(--palette-text-secondary);
-}
-
-.luoxiaohei-panel-toggle:hover {
-  background: var(--palette-surface-muted);
-  color: var(--palette-text-primary);
-}
-
 .luoxiaohei-color-pair-list {
   display: flex;
   flex-wrap: nowrap;
@@ -249,12 +230,6 @@
 
   .luoxiaohei-page .workbench-panel {
     order: 2;
-  }
-
-  .luoxiaohei-page .panel-scroll {
-    max-height: none;
-    overflow: visible;
-    padding-right: 0;
   }
 
   .luoxiaohei-canvas {

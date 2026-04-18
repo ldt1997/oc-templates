@@ -2,7 +2,6 @@ import { useEffect, useRef, useState } from "react";
 import { message, type UploadFile, type UploadProps } from "antd";
 import { TemplateWorkbenchLayout } from "@/components/template/TemplateWorkbenchLayout";
 import { exportElementAsPng } from "@/utils/exportImage";
-import { templates } from "@/data/templates";
 import {
   buildColorPairsFromImage,
   hexToRgbTuple,
@@ -17,9 +16,7 @@ import "../TemplatePage.css";
 import "./index.css";
 
 export function LuoxiaoheiPage() {
-  const templateMeta = templates.find((t) => t.id === "luoxiaohei");
   // 状态管理
-  const [panelCollapsed, setPanelCollapsed] = useState(false);
   const [bgColor1, setBgColor1] = useState("#ff385c"); // Rausch Red
   const [bgColor2, setBgColor2] = useState("#222222"); // 深灰
   const [logoColor, setLogoColor] = useState("#690f11");
@@ -155,8 +152,6 @@ export function LuoxiaoheiPage() {
 
   const panel = (
     <LuoxiaoheiControlPanel
-      templateMeta={templateMeta}
-      panelCollapsed={panelCollapsed}
       uploadProps={uploadProps}
       imageScale={imageScale}
       onImageScaleChange={setImageScale}
@@ -176,7 +171,6 @@ export function LuoxiaoheiPage() {
       logoColor={logoColor}
       onLogoColorChange={setLogoColor}
       isMobileMode={isMobileMode}
-      onTogglePanel={() => setPanelCollapsed((value) => !value)}
     />
   );
 
