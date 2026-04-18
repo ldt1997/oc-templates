@@ -239,6 +239,24 @@
 
 /* 响应式缩放 */
 @media (max-width: 960px) {
+  .luoxiaohei-page .template-workbench {
+    gap: 12px;
+  }
+
+  .luoxiaohei-page .workbench-preview {
+    order: 1;
+  }
+
+  .luoxiaohei-page .workbench-panel {
+    order: 2;
+  }
+
+  .luoxiaohei-page .panel-scroll {
+    max-height: none;
+    overflow: visible;
+    padding-right: 0;
+  }
+
   .luoxiaohei-canvas {
     width: 100%;
     height: auto;

@@ -66,7 +66,7 @@ export function LuoxiaoheiControlPanel({
 }: LuoxiaoheiControlPanelProps) {
   return (
     <Card className="control-card" bordered={false}>
-      <div className="panel-head">
+      {/* <div className="panel-head">
         <div>
           <div className="luoxiaohei-panel-title-row">
             <Typography.Title level={4}>{templateMeta?.name}</Typography.Title>
@@ -82,7 +82,7 @@ export function LuoxiaoheiControlPanel({
             {templateMeta?.description}
           </Typography.Paragraph>
         </div>
-      </div>
+      </div> */}
 
       {!panelCollapsed ? (
         <div className="panel-scroll">

@@ -200,12 +200,14 @@ export function LuoxiaoheiPage() {
   );
 
   return (
-    <TemplateWorkbenchLayout
-      panel={panel}
-      preview={preview}
-      collapsed={false}
-      onToggleCollapsed={() => undefined}
-      showDefaultToggle={false}
-    />
+    <div className="luoxiaohei-page">
+      <TemplateWorkbenchLayout
+        panel={panel}
+        preview={preview}
+        collapsed={false}
+        onToggleCollapsed={() => undefined}
+        showDefaultToggle={false}
+      />
+    </div>
   );
 }

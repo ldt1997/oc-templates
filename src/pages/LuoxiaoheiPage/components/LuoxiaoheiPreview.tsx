@@ -38,16 +38,7 @@ export function LuoxiaoheiPreview({
 }: LuoxiaoheiPreviewProps) {
   return (
     <div className="preview-column">
-      <div className="preview-toolbar" style={{ gap: "12px", alignItems: "center" }}>
-        <span
-          style={{
-            fontSize: "12px",
-            color: "var(--palette-text-secondary)",
-            whiteSpace: "nowrap",
-          }}
-        >
-          缩放
-        </span>
+      <div className="preview-toolbar">
         <Slider
           className="luoxiaohei-canvas-scale-slider"
           min={0.5}
