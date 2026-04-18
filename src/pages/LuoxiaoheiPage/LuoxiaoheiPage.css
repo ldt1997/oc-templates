@@ -149,6 +149,13 @@
 .luoxiaohei-text-small {
   font-size: 2.8em;
   font-family: 'Monaco', 'Menlo', monospace;
+  color: inherit;
+  text-decoration: none;
+}
+
+.luoxiaohei-text-small * {
+  color: inherit;
+  text-decoration: none !important;
 }
 
 /* 5. 用户图片层 */
