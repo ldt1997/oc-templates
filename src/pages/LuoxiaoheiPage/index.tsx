@@ -32,6 +32,22 @@ import "./LuoxiaoheiPage.css";
 
 const { Dragger } = Upload;
 
+function fileToDataUrl(file: File): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => {
+      const result = reader.result;
+      if (typeof result === "string") {
+        resolve(result);
+        return;
+      }
+      reject(new Error("图片读取失败"));
+    };
+    reader.onerror = () => reject(new Error("图片读取失败"));
+    reader.readAsDataURL(file);
+  });
+}
+
 export function LuoxiaoheiPage() {
   // 状态管理
   const [panelCollapsed, setPanelCollapsed] = useState(false);
@@ -82,14 +98,6 @@ export function LuoxiaoheiPage() {
       cancelled = true;
     };
   }, []);
-
-  useEffect(() => {
-    return () => {
-      if (userImage.startsWith("blob:")) {
-        URL.revokeObjectURL(userImage);
-      }
-    };
-  }, [userImage]);
 
   useEffect(() => {
     const canvasElement = canvasRef.current;
@@ -144,16 +152,15 @@ export function LuoxiaoheiPage() {
     accept: "image/*",
     maxCount: 1,
     beforeUpload: () => false,
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    onChange: async (info: any) => {
+    onChange: async (info) => {
       const file = info.fileList[0] as UploadFile | undefined;
       if (file?.originFileObj) {
-        const url = URL.createObjectURL(file.originFileObj);
-        setUserImage(url);
         try {
-          await applyColorPairsFromImage(url);
+          const dataUrl = await fileToDataUrl(file.originFileObj);
+          setUserImage(dataUrl);
+          await applyColorPairsFromImage(dataUrl);
         } catch {
-          message.warning("自动配色失败，可手动调整颜色");
+          message.warning("图片读取或自动配色失败，可手动调整颜色");
         }
       }
     },
@@ -179,6 +186,8 @@ export function LuoxiaoheiPage() {
           transform: "none",
           width: "1080px",
           height: "1920px",
+          maxWidth: "1080px",
+          borderRadius: "0",
           fontSize: "10px",
         },
       });
@@ -367,15 +376,20 @@ export function LuoxiaoheiPage() {
       </div>
 
       <div
-        ref={canvasRef}
-        className="luoxiaohei-canvas"
+        className="luoxiaohei-canvas-stage"
         style={{
           transform: `scale(${canvasScale})`,
           transformOrigin: "top center",
           transition: "transform 0.2s ease",
-          fontSize: `${canvasBaseFontSize}px`,
         }}
       >
+        <div
+          ref={canvasRef}
+          className="luoxiaohei-canvas"
+          style={{
+            fontSize: `${canvasBaseFontSize}px`,
+          }}
+        >
         {/* 1. 白色背景 - 默认 */}
 
         {/* 2. 双色渐变背景 */}
@@ -438,12 +452,13 @@ export function LuoxiaoheiPage() {
           />
         )}
 
-        {/* 6. Logo */}
-        <div
-          aria-label="logo"
-          className="luoxiaohei-logo luoxiaohei-logo-mask"
-          style={{ backgroundColor: logoColor }}
-        />
+          {/* 6. Logo */}
+          <div
+            aria-label="logo"
+            className="luoxiaohei-logo luoxiaohei-logo-mask"
+            style={{ backgroundColor: logoColor }}
+          />
+        </div>
       </div>
     </div>
   );
