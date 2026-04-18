@@ -39,6 +39,44 @@ const STYLE_KEYS: Array<keyof ExportStyleOverride> = [
   "fontSize",
 ];
 
+async function waitForImagesReady(root: HTMLElement) {
+  const images = Array.from(root.querySelectorAll("img"));
+  await Promise.all(
+    images.map(async (img) => {
+      if (img.complete && img.naturalWidth > 0) {
+        return;
+      }
+
+      await new Promise<void>((resolve) => {
+        const cleanup = () => {
+          img.removeEventListener("load", onLoad);
+          img.removeEventListener("error", onError);
+        };
+
+        const onLoad = async () => {
+          cleanup();
+          if (typeof img.decode === "function") {
+            try {
+              await img.decode();
+            } catch {
+              // Ignore decode failures and allow export to proceed.
+            }
+          }
+          resolve();
+        };
+
+        const onError = () => {
+          cleanup();
+          resolve();
+        };
+
+        img.addEventListener("load", onLoad);
+        img.addEventListener("error", onError);
+      });
+    }),
+  );
+}
+
 export async function exportElementAsPng(
   element: HTMLElement,
   options: ExportElementAsPngOptions,
@@ -69,6 +107,8 @@ export async function exportElementAsPng(
         element.style[key] = nextValue;
       }
     }
+
+    await waitForImagesReady(element);
 
     const dataUrl = await toPng(element, {
       cacheBust: true,

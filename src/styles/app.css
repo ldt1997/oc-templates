@@ -1,5 +1,13 @@
 @import url('https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@400;500;600;700;800&display=swap');
 
+@font-face {
+  font-family: 'YuanGuSongTi-F';
+  src: url('/fonts/yuanGuSongTi-F.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
 :root {
   --palette-bg-primary-core: #ff385c;
   --palette-bg-tertiary-core: #e00b41;
@@ -72,4 +80,11 @@ body {
 
 .ant-upload-wrapper .ant-upload-drag {
   border-radius: 14px;
+}
+
+a[x-apple-data-detectors],
+.luoxiaohei-text-small a {
+  color: inherit !important;
+  text-decoration: none !important;
+  font: inherit !important;
 }
