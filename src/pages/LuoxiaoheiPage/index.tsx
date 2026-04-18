@@ -458,6 +458,13 @@ export function LuoxiaoheiPage() {
           />
 
           <div className="luoxiaohei-name-frame" aria-label="人物名称">
+            <img
+              className="luoxiaohei-name-frame-image"
+              src="/templates/luoxiaohei/photos/nameframe.png"
+              alt=""
+              aria-hidden="true"
+              draggable={false}
+            />
             <div className="luoxiaohei-name-text">{name}</div>
           </div>
         </div>

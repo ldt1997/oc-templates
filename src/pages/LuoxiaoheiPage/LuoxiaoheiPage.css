@@ -187,32 +187,40 @@
 
 .luoxiaohei-name-frame {
   position: absolute;
-  top: 55%;
-  left: 85%;
-  width: fit-content;
+  top: 60%;
+  left: 80%;
+  width: 14em;
   height: auto;
-  padding: 1em 1.5em;
+  padding: 4em 0.75em;
   z-index: 5;
   box-sizing: border-box;
+  overflow: hidden;
   display: flex;
   align-items: center;
   justify-content: center;
-  border: 3em solid transparent;
-  border-image-source: url('/templates/luoxiaohei/photos/nameframe.svg');
-  border-image-slice: 80;
-  border-image-width: 5em;
-  border-image-repeat: stretch;
+}
+
+.luoxiaohei-name-frame-image {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: fill;
+  pointer-events: none;
+  z-index: 0;
 }
 
 .luoxiaohei-name-text {
   font-family: 'YuanGuSongTi-F', serif;
   font-weight: lighter;
-  font-size: 5em;
+  font-size: 4em;
   line-height: 1;
   writing-mode: vertical-rl;
   letter-spacing: 0.3em;
   text-orientation: upright;
   white-space: nowrap;
+  position: relative;
+  z-index: 1;
 }
 
 /* 响应式缩放 */
