@@ -57,7 +57,7 @@ export function LuoxiaoheiPage() {
   const [title1, setTitle1] = useState("朝");
   const [title2, setTitle2] = useState("晚");
   const [userImage, setUserImage] = useState<string>("");
-  const [imageScale, setImageScale] = useState(1);
+  const [imageScale, setImageScale] = useState(1.2);
   const [canvasScale, setCanvasScale] = useState(1);
   const [canvasBaseFontSize, setCanvasBaseFontSize] = useState(10);
   const [palette, setPalette] = useState<PaletteColor[]>([]);
