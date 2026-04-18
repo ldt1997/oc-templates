@@ -16,6 +16,7 @@ interface LuoxiaoheiPreviewProps {
   userImage: string;
   imageScale: number;
   logoColor: string;
+  isMobileMode: boolean;
   name: string;
 }
 
@@ -32,20 +33,12 @@ export function LuoxiaoheiPreview({
   userImage,
   imageScale,
   logoColor,
+  isMobileMode,
   name,
 }: LuoxiaoheiPreviewProps) {
   return (
     <div className="preview-column">
-      <div className="preview-toolbar" style={{ gap: "12px", alignItems: "center" }}>
-        <span
-          style={{
-            fontSize: "12px",
-            color: "var(--palette-text-secondary)",
-            whiteSpace: "nowrap",
-          }}
-        >
-          缩放
-        </span>
+      <div className="preview-toolbar">
         <Slider
           className="luoxiaohei-canvas-scale-slider"
           min={0.5}
@@ -133,11 +126,23 @@ export function LuoxiaoheiPreview({
             />
           )}
 
-          <div
-            aria-label="logo"
-            className="luoxiaohei-logo luoxiaohei-logo-mask"
-            style={{ backgroundColor: logoColor }}
-          />
+          {isMobileMode ? (
+            <div aria-label="logo" className="luoxiaohei-logo">
+              <img
+                className="luoxiaohei-logo-image"
+                src="/templates/luoxiaohei/photos/luoxiaoheilogo.png"
+                alt=""
+                aria-hidden="true"
+                draggable={false}
+              />
+            </div>
+          ) : (
+            <div
+              aria-label="logo"
+              className="luoxiaohei-logo luoxiaohei-logo-mask"
+              style={{ backgroundColor: logoColor }}
+            />
+          )}
 
           <div className="luoxiaohei-name-frame" aria-label="人物名称">
             <img

@@ -2,7 +2,6 @@ import { useEffect, useRef, useState } from "react";
 import { message, type UploadFile, type UploadProps } from "antd";
 import { TemplateWorkbenchLayout } from "@/components/template/TemplateWorkbenchLayout";
 import { exportElementAsPng } from "@/utils/exportImage";
-import { templates } from "@/data/templates";
 import {
   buildColorPairsFromImage,
   hexToRgbTuple,
@@ -14,12 +13,10 @@ import { LuoxiaoheiControlPanel } from "./components/LuoxiaoheiControlPanel";
 import { LuoxiaoheiPreview } from "./components/LuoxiaoheiPreview";
 import { useCanvasBaseFontSize } from "./components/useCanvasBaseFontSize";
 import "../TemplatePage.css";
-import "./LuoxiaoheiPage.css";
+import "./index.css";
 
 export function LuoxiaoheiPage() {
-  const templateMeta = templates.find((t) => t.id === "luoxiaohei");
   // 状态管理
-  const [panelCollapsed, setPanelCollapsed] = useState(false);
   const [bgColor1, setBgColor1] = useState("#ff385c"); // Rausch Red
   const [bgColor2, setBgColor2] = useState("#222222"); // 深灰
   const [logoColor, setLogoColor] = useState("#690f11");
@@ -29,6 +26,7 @@ export function LuoxiaoheiPage() {
   const [userImage, setUserImage] = useState<string>("");
   const [imageScale, setImageScale] = useState(1.2);
   const [canvasScale, setCanvasScale] = useState(1);
+  const [isMobileMode, setIsMobileMode] = useState(false);
   const [palette, setPalette] = useState<PaletteColor[]>([]);
   const [colorPairs, setColorPairs] = useState<ColorPair[]>([]);
   const [selectedPairId, setSelectedPairId] = useState<string>("");
@@ -66,6 +64,23 @@ export function LuoxiaoheiPage() {
     void loadPalette();
     return () => {
       cancelled = true;
+    };
+  }, []);
+
+  useEffect(() => {
+    const mediaQuery = window.matchMedia("(max-width: 960px)");
+    const updateMobileMode = () => {
+      const byUa = /Android|iPhone|iPad|iPod|Mobile|Windows Phone/i.test(navigator.userAgent || "");
+      setIsMobileMode(byUa || mediaQuery.matches);
+    };
+
+    updateMobileMode();
+    mediaQuery.addEventListener("change", updateMobileMode);
+    window.addEventListener("resize", updateMobileMode);
+
+    return () => {
+      mediaQuery.removeEventListener("change", updateMobileMode);
+      window.removeEventListener("resize", updateMobileMode);
     };
   }, []);
 
@@ -137,8 +152,6 @@ export function LuoxiaoheiPage() {
 
   const panel = (
     <LuoxiaoheiControlPanel
-      templateMeta={templateMeta}
-      panelCollapsed={panelCollapsed}
       uploadProps={uploadProps}
       imageScale={imageScale}
       onImageScaleChange={setImageScale}
@@ -157,7 +170,7 @@ export function LuoxiaoheiPage() {
       onNameChange={setName}
       logoColor={logoColor}
       onLogoColorChange={setLogoColor}
-      onTogglePanel={() => setPanelCollapsed((value) => !value)}
+      isMobileMode={isMobileMode}
     />
   );
 
@@ -175,17 +188,20 @@ export function LuoxiaoheiPage() {
       userImage={userImage}
       imageScale={imageScale}
       logoColor={logoColor}
+      isMobileMode={isMobileMode}
       name={name}
     />
   );
 
   return (
-    <TemplateWorkbenchLayout
-      panel={panel}
-      preview={preview}
-      collapsed={false}
-      onToggleCollapsed={() => undefined}
-      showDefaultToggle={false}
-    />
+    <div className="luoxiaohei-page">
+      <TemplateWorkbenchLayout
+        panel={panel}
+        preview={preview}
+        collapsed={false}
+        onToggleCollapsed={() => undefined}
+        showDefaultToggle={false}
+      />
+    </div>
   );
 }

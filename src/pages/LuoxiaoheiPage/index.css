@@ -60,25 +60,6 @@
   font-family: 'YuanGuSongTi-F', serif;
 }
 
-.luoxiaohei-panel-title-row {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 0.8rem;
-}
-
-.luoxiaohei-panel-toggle {
-  width: 2rem;
-  height: 2rem;
-  border-radius: 999px;
-  color: var(--palette-text-secondary);
-}
-
-.luoxiaohei-panel-toggle:hover {
-  background: var(--palette-surface-muted);
-  color: var(--palette-text-primary);
-}
-
 .luoxiaohei-color-pair-list {
   display: flex;
   flex-wrap: nowrap;
@@ -192,6 +173,13 @@
   mask-size: contain;
 }
 
+.luoxiaohei-logo-image {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: contain;
+}
+
 .luoxiaohei-name-frame {
   position: absolute;
   top: 60%;
@@ -232,6 +220,18 @@
 
 /* 响应式缩放 */
 @media (max-width: 960px) {
+  .luoxiaohei-page .template-workbench {
+    gap: 12px;
+  }
+
+  .luoxiaohei-page .workbench-preview {
+    order: 1;
+  }
+
+  .luoxiaohei-page .workbench-panel {
+    order: 2;
+  }
+
   .luoxiaohei-canvas {
     width: 100%;
     height: auto;
