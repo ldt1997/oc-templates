@@ -1,5 +1,3 @@
-import { toPng } from "html-to-image";
-
 type ExportStyleOverride = Partial<
   Pick<
     CSSStyleDeclaration,
@@ -38,6 +36,65 @@ const STYLE_KEYS: Array<keyof ExportStyleOverride> = [
   "transform",
   "fontSize",
 ];
+
+let cachedFontEmbedCss: string | null = null;
+let html2canvasModulePromise: Promise<typeof import("html2canvas")> | null = null;
+let htmlToImageModulePromise: Promise<typeof import("html-to-image")> | null = null;
+
+function loadHtml2canvasModule() {
+  if (!html2canvasModulePromise) {
+    html2canvasModulePromise = import("html2canvas");
+  }
+
+  return html2canvasModulePromise;
+}
+
+function loadHtmlToImageModule() {
+  if (!htmlToImageModulePromise) {
+    htmlToImageModulePromise = import("html-to-image");
+  }
+
+  return htmlToImageModulePromise;
+}
+
+function isMobileLikeDevice() {
+  const ua = navigator.userAgent || "";
+  const byUa = /Android|iPhone|iPad|iPod|Mobile|Windows Phone/i.test(ua);
+  const byViewport = window.matchMedia?.("(max-width: 960px)")?.matches ?? false;
+  return byUa || byViewport;
+}
+
+function nextAnimationFrame(): Promise<void> {
+  return new Promise((resolve) => {
+    requestAnimationFrame(() => resolve());
+  });
+}
+
+async function waitForFontsReady(root: HTMLElement) {
+  if (typeof document.fonts?.ready !== "undefined") {
+    await document.fonts.ready;
+  }
+
+  if (typeof document.fonts?.load === "function") {
+    try {
+      await Promise.all([
+        document.fonts.load("400 16px 'YuanGuSongTi-F'"),
+        document.fonts.load("400 16px 'Monaco'"),
+      ]);
+    } catch {
+      // Continue with already available fonts.
+    }
+  }
+
+  if (!cachedFontEmbedCss) {
+    try {
+      const { getFontEmbedCSS } = await loadHtmlToImageModule();
+      cachedFontEmbedCss = await getFontEmbedCSS(root);
+    } catch {
+      cachedFontEmbedCss = "";
+    }
+  }
+}
 
 async function waitForImagesReady(root: HTMLElement) {
   const images = Array.from(root.querySelectorAll("img"));
@@ -108,15 +165,38 @@ export async function exportElementAsPng(
       }
     }
 
+    await waitForFontsReady(element);
     await waitForImagesReady(element);
+    await nextAnimationFrame();
+    await nextAnimationFrame();
 
-    const dataUrl = await toPng(element, {
-      cacheBust: true,
-      pixelRatio,
-      backgroundColor,
-      width,
-      height,
-    });
+    const isMobileExport = isMobileLikeDevice();
+
+    const dataUrl = isMobileExport
+      ? await (async () => {
+          const html2canvas = (await loadHtml2canvasModule()).default;
+          const canvas = await html2canvas(element, {
+            backgroundColor,
+            useCORS: true,
+            allowTaint: true,
+            width,
+            height,
+            scale: pixelRatio,
+            logging: false,
+          });
+          return canvas.toDataURL("image/png");
+        })()
+      : await (async () => {
+          const { toPng } = await loadHtmlToImageModule();
+          return toPng(element, {
+            cacheBust: true,
+            pixelRatio,
+            backgroundColor,
+            width,
+            height,
+            fontEmbedCSS: cachedFontEmbedCss ?? undefined,
+          });
+        })();
 
     const link = document.createElement("a");
     link.download = fileName;
