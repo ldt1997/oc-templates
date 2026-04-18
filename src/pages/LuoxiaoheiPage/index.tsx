@@ -310,10 +310,10 @@ export function LuoxiaoheiPage() {
 
             <Form.Item label="人物名称">
               <Input
-                maxLength={10}
+                maxLength={5}
                 value={name}
                 onChange={(e) => setName(e.target.value)}
-                placeholder="十个汉字以内"
+                placeholder="五个汉字以内"
               />
             </Form.Item>
 
@@ -369,7 +369,7 @@ export function LuoxiaoheiPage() {
           icon={<DownloadOutlined />}
           onClick={handleExport}
         >
-          导出图片
+          导出
         </Button>
       </div>
 
