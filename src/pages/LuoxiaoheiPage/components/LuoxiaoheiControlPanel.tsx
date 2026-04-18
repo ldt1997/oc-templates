@@ -11,6 +11,7 @@ import {
 } from "antd";
 import { InboxOutlined, LeftOutlined, RightOutlined } from "@ant-design/icons";
 import type { ColorPair } from "./colorRecommendation";
+import type { TemplateMeta } from "../../../types/template";
 
 const { Dragger } = Upload;
 
@@ -35,6 +36,7 @@ interface LuoxiaoheiControlPanelProps {
   logoColor: string;
   onLogoColorChange: (value: string) => void;
   onTogglePanel: () => void;
+  templateMeta?: TemplateMeta;
 }
 
 export function LuoxiaoheiControlPanel({
@@ -58,13 +60,14 @@ export function LuoxiaoheiControlPanel({
   logoColor,
   onLogoColorChange,
   onTogglePanel,
+  templateMeta,
 }: LuoxiaoheiControlPanelProps) {
   return (
     <Card className="control-card" bordered={false}>
       <div className="panel-head">
         <div>
           <div className="luoxiaohei-panel-title-row">
-            <Typography.Title level={4}>罗小黑人物双色海报</Typography.Title>
+            <Typography.Title level={4}>{templateMeta?.name}</Typography.Title>
             <Button
               className="luoxiaohei-panel-toggle"
               type="text"
@@ -74,7 +77,7 @@ export function LuoxiaoheiControlPanel({
             />
           </div>
           <Typography.Paragraph className="panel-desc">
-            配置背景色、标题和图片，实时生成风格统一的视觉海报。
+            {templateMeta?.description}
           </Typography.Paragraph>
         </div>
       </div>

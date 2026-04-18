@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { message, type UploadFile, type UploadProps } from "antd";
 import { TemplateWorkbenchLayout } from "../../components/template/TemplateWorkbenchLayout";
 import { exportElementAsPng } from "../../utils/exportImage";
+import { templates } from "../../data/templates";
 import {
   buildColorPairsFromImage,
   hexToRgbTuple,
@@ -16,6 +17,7 @@ import "../TemplatePage.css";
 import "./LuoxiaoheiPage.css";
 
 export function LuoxiaoheiPage() {
+  const templateMeta = templates.find((t) => t.id === "luoxiaohei");
   // 状态管理
   const [panelCollapsed, setPanelCollapsed] = useState(false);
   const [bgColor1, setBgColor1] = useState("#ff385c"); // Rausch Red
@@ -135,6 +137,7 @@ export function LuoxiaoheiPage() {
 
   const panel = (
     <LuoxiaoheiControlPanel
+      templateMeta={templateMeta}
       panelCollapsed={panelCollapsed}
       uploadProps={uploadProps}
       imageScale={imageScale}

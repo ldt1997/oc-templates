@@ -1,7 +1,7 @@
 .template-workbench {
   position: relative;
   display: flex;
-  gap: 20px;
+  gap: 48px;
   align-items: stretch;
   --panel-width: 390px;
 }
@@ -34,12 +34,12 @@
 .workbench-preview::before {
   content: '';
   position: absolute;
-  left: -10px;
+  left: -40px;
   top: 0;
   bottom: 0;
   width: 1px;
-  background: color-mix(in srgb, var(--palette-border), transparent 15%);
-  box-shadow: rgba(15, 23, 42, 0.08) 0 0 14px;
+  opacity: 0.25;
+  background: var(--palette-border);
   pointer-events: none;
 }
 

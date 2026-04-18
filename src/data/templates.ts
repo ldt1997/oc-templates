@@ -5,9 +5,9 @@ export const templates: TemplateMeta[] = [
     id: 'luoxiaohei',
     name: '罗小黑人物双色海报',
     description:
-      '上传人物图后，通过双色映射、主副标题和版式参数快速生成风格统一的视觉海报。',
+      '自动提取主题双色，一键生成风格统一的视觉海报。',
     cover:
-      'https://images.unsplash.com/photo-1614102073832-030967418971?auto=format&fit=crop&w=1200&q=80',
+      '/templates/luoxiaohei/photos/sample.png',
     route: '/luoxiaohei',
     tags: ['海报', '人物', '双色'],
   }
