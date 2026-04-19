@@ -36,8 +36,8 @@ const STYLE_KEYS: Array<keyof ExportStyleOverride> = [
   "transform",
   "fontSize",
 ];
-const MOBILE_EXPORT_TITLE_OFFSET_X_PX = 15;
-const MOBILE_EXPORT_TITLE_OFFSET_Y_PX = -18;
+const MOBILE_EXPORT_TITLE_OFFSET_X_PX = 18;
+const MOBILE_EXPORT_TITLE_OFFSET_Y_PX = -20;
 
 let cachedFontEmbedCss: string | null = null;
 let html2canvasModulePromise: Promise<typeof import("html2canvas")> | null =
