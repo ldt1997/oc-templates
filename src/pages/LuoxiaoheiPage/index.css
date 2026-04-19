@@ -55,9 +55,12 @@
 .luoxiaohei-text-block {
   position: absolute;
   top: 0;
-  padding: 2em;
+  padding: 1em;
   z-index: 2;
-  font-family: 'YuanGuSongTi-F', serif;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  font-family: 'YuanGuSongTi-F', 'Songti SC', 'STSong', serif;
 }
 
 .luoxiaohei-color-pair-list {
@@ -86,13 +89,35 @@
 
 .luoxiaohei-inline-color-row {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
   gap: 0.75rem;
+  align-items: end;
   margin-bottom: 24px;
 }
 
 .luoxiaohei-inline-color-item {
   margin-bottom: 0;
+  min-width: 0;
+}
+
+.luoxiaohei-inline-color-item .ant-form-item-control {
+  width: 100%;
+}
+
+.luoxiaohei-inline-color-item .ant-color-picker-trigger {
+  width: 100%;
+  justify-content: space-between;
+}
+
+.luoxiaohei-inline-color-swap {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  min-width: 40px;
+}
+
+.luoxiaohei-inline-color-swap-btn {
+  flex: 0 0 auto;
 }
 
 .luoxiaohei-color-pair-btn:hover {
@@ -111,27 +136,40 @@
 
 .luoxiaohei-text-right {
   right: 0;
-  text-align: right;
-  display: flex;
-  flex-direction: column;
+  align-items: flex-end;
 }
 
 .luoxiaohei-title {
+  display: block;
+  inline-size: max-content;
   font-size: 20em;
   font-weight: lighter;
   writing-mode: vertical-rl;
   text-orientation: upright;
   letter-spacing: 0.1em;
   line-height: 1;
+  margin: 0;
   white-space: nowrap;
   word-break: keep-all;
 }
 
 .luoxiaohei-text-small {
+  display: grid;
+  gap: 0.25em;
+  inline-size: max-content;
   font-size: 2.8em;
-  font-family: 'Monaco', 'Menlo', monospace;
+  line-height: 1.15;
+  font-family: 'SFMono-Regular', 'Menlo', 'Monaco', 'Roboto Mono', 'Consolas',
+    'Liberation Mono', 'Courier New', monospace;
   color: inherit;
   text-decoration: none;
+  white-space: nowrap;
+}
+
+.luoxiaohei-text-right .luoxiaohei-title,
+.luoxiaohei-text-right .luoxiaohei-text-small {
+  align-self: flex-end;
+  text-align: right;
 }
 
 .luoxiaohei-text-small * {
@@ -206,7 +244,8 @@
 }
 
 .luoxiaohei-name-text {
-  font-family: 'YuanGuSongTi-F', serif;
+  font-family: 'YuanGuSongTi-F', 'Songti SC', 'STSong', serif;
+  color:black;
   font-weight: lighter;
   font-size: 4em;
   line-height: 1;
@@ -240,10 +279,6 @@
 
   .luoxiaohei-color-pair-btn {
     font-size: 0.7rem;
-  }
-
-  .luoxiaohei-inline-color-row {
-    grid-template-columns: 1fr;
   }
 
   .luoxiaohei-canvas-scale-slider {

@@ -36,10 +36,14 @@ const STYLE_KEYS: Array<keyof ExportStyleOverride> = [
   "transform",
   "fontSize",
 ];
+const MOBILE_EXPORT_TITLE_OFFSET_X_PX = 18;
+const MOBILE_EXPORT_TITLE_OFFSET_Y_PX = -20;
 
 let cachedFontEmbedCss: string | null = null;
-let html2canvasModulePromise: Promise<typeof import("html2canvas")> | null = null;
-let htmlToImageModulePromise: Promise<typeof import("html-to-image")> | null = null;
+let html2canvasModulePromise: Promise<typeof import("html2canvas")> | null =
+  null;
+let htmlToImageModulePromise: Promise<typeof import("html-to-image")> | null =
+  null;
 
 function loadHtml2canvasModule() {
   if (!html2canvasModulePromise) {
@@ -60,7 +64,8 @@ function loadHtmlToImageModule() {
 function isMobileLikeDevice() {
   const ua = navigator.userAgent || "";
   const byUa = /Android|iPhone|iPad|iPod|Mobile|Windows Phone/i.test(ua);
-  const byViewport = window.matchMedia?.("(max-width: 960px)")?.matches ?? false;
+  const byViewport =
+    window.matchMedia?.("(max-width: 960px)")?.matches ?? false;
   return byUa || byViewport;
 }
 
@@ -70,7 +75,7 @@ function nextAnimationFrame(): Promise<void> {
   });
 }
 
-async function waitForFontsReady(root: HTMLElement) {
+async function waitForFontsReady() {
   if (typeof document.fonts?.ready !== "undefined") {
     await document.fonts.ready;
   }
@@ -79,17 +84,22 @@ async function waitForFontsReady(root: HTMLElement) {
     try {
       await Promise.all([
         document.fonts.load("400 16px 'YuanGuSongTi-F'"),
-        document.fonts.load("400 16px 'Monaco'"),
+        document.fonts.load("400 16px 'SFMono-Regular'"),
+        document.fonts.load("400 16px 'Menlo'"),
       ]);
     } catch {
       // Continue with already available fonts.
     }
   }
+}
 
+async function ensureFontEmbedCss(root: HTMLElement) {
   if (!cachedFontEmbedCss) {
     try {
       const { getFontEmbedCSS } = await loadHtmlToImageModule();
-      cachedFontEmbedCss = await getFontEmbedCSS(root);
+      cachedFontEmbedCss = await getFontEmbedCSS(root, {
+        preferredFontFormat: "woff2",
+      });
     } catch {
       cachedFontEmbedCss = "";
     }
@@ -134,6 +144,99 @@ async function waitForImagesReady(root: HTMLElement) {
   );
 }
 
+function createExportHost(width: number, height: number) {
+  const host = document.createElement("div");
+  host.setAttribute("aria-hidden", "true");
+  Object.assign(host.style, {
+    position: "fixed",
+    top: "0",
+    left: "-20000px",
+    width: `${width}px`,
+    height: `${height}px`,
+    overflow: "hidden",
+    opacity: "0",
+    pointerEvents: "none",
+    isolation: "isolate",
+    contain: "layout size style paint",
+  });
+  return host;
+}
+
+function createExportClone(
+  element: HTMLElement,
+  resolvedStyle: ExportStyleOverride,
+) {
+  const clone = element.cloneNode(true) as HTMLElement;
+
+  for (const key of STYLE_KEYS) {
+    const nextValue = resolvedStyle[key];
+    if (typeof nextValue === "string") {
+      clone.style[key] = nextValue;
+    }
+  }
+
+  clone.dataset.exportRoot = "true";
+  return clone;
+}
+
+function applyExportFixes(root: HTMLElement, mobileLike: boolean) {
+  if (!mobileLike) {
+    return;
+  }
+
+  root.querySelectorAll<HTMLElement>(".luoxiaohei-title").forEach((title) => {
+    title.style.transform = `translate(${MOBILE_EXPORT_TITLE_OFFSET_X_PX}px, ${MOBILE_EXPORT_TITLE_OFFSET_Y_PX}px)`;
+  });
+}
+
+async function renderWithHtmlToImage(
+  element: HTMLElement,
+  options: Required<
+    Pick<
+      ExportElementAsPngOptions,
+      "width" | "height" | "backgroundColor" | "pixelRatio"
+    >
+  >,
+) {
+  const { toPng } = await loadHtmlToImageModule();
+
+  return toPng(element, {
+    cacheBust: true,
+    pixelRatio: options.pixelRatio,
+    backgroundColor: options.backgroundColor,
+    width: options.width,
+    height: options.height,
+    preferredFontFormat: "woff2",
+    fontEmbedCSS: cachedFontEmbedCss ?? undefined,
+    skipAutoScale: true,
+  });
+}
+
+async function renderWithHtml2Canvas(
+  element: HTMLElement,
+  options: Required<
+    Pick<
+      ExportElementAsPngOptions,
+      "width" | "height" | "backgroundColor" | "pixelRatio"
+    >
+  >,
+) {
+  const html2canvas = (await loadHtml2canvasModule()).default;
+  const canvas = await html2canvas(element, {
+    backgroundColor: options.backgroundColor,
+    useCORS: true,
+    allowTaint: true,
+    width: options.width,
+    height: options.height,
+    windowWidth: options.width,
+    windowHeight: options.height,
+    scale: options.pixelRatio,
+    logging: false,
+  });
+
+  return canvas.toDataURL("image/png");
+}
+
 export async function exportElementAsPng(
   element: HTMLElement,
   options: ExportElementAsPngOptions,
@@ -153,58 +256,48 @@ export async function exportElementAsPng(
     ...DEFAULT_STYLE_OVERRIDE,
     ...styleOverride,
   };
-
-  const previousStyle: Partial<Record<keyof ExportStyleOverride, string>> = {};
+  const exportOptions = {
+    width,
+    height,
+    backgroundColor,
+    pixelRatio,
+  } as const;
+  const preferHtml2Canvas = isMobileLikeDevice();
+  const host = createExportHost(width, height);
+  const exportClone = createExportClone(element, resolvedStyle);
 
   try {
-    for (const key of STYLE_KEYS) {
-      previousStyle[key] = element.style[key] ?? "";
-      const nextValue = resolvedStyle[key];
-      if (typeof nextValue === "string") {
-        element.style[key] = nextValue;
+    host.append(exportClone);
+    document.body.append(host);
+    applyExportFixes(exportClone, preferHtml2Canvas);
+
+    await waitForFontsReady();
+    await waitForImagesReady(exportClone);
+    await nextAnimationFrame();
+    await nextAnimationFrame();
+
+    let dataUrl: string;
+    if (preferHtml2Canvas) {
+      try {
+        dataUrl = await renderWithHtml2Canvas(exportClone, exportOptions);
+      } catch {
+        await ensureFontEmbedCss(exportClone);
+        dataUrl = await renderWithHtmlToImage(exportClone, exportOptions);
+      }
+    } else {
+      try {
+        await ensureFontEmbedCss(exportClone);
+        dataUrl = await renderWithHtmlToImage(exportClone, exportOptions);
+      } catch {
+        dataUrl = await renderWithHtml2Canvas(exportClone, exportOptions);
       }
     }
-
-    await waitForFontsReady(element);
-    await waitForImagesReady(element);
-    await nextAnimationFrame();
-    await nextAnimationFrame();
-
-    const isMobileExport = isMobileLikeDevice();
-
-    const dataUrl = isMobileExport
-      ? await (async () => {
-          const html2canvas = (await loadHtml2canvasModule()).default;
-          const canvas = await html2canvas(element, {
-            backgroundColor,
-            useCORS: true,
-            allowTaint: true,
-            width,
-            height,
-            scale: pixelRatio,
-            logging: false,
-          });
-          return canvas.toDataURL("image/png");
-        })()
-      : await (async () => {
-          const { toPng } = await loadHtmlToImageModule();
-          return toPng(element, {
-            cacheBust: true,
-            pixelRatio,
-            backgroundColor,
-            width,
-            height,
-            fontEmbedCSS: cachedFontEmbedCss ?? undefined,
-          });
-        })();
 
     const link = document.createElement("a");
     link.download = fileName;
     link.href = dataUrl;
     link.click();
   } finally {
-    for (const key of STYLE_KEYS) {
-      element.style[key] = previousStyle[key] ?? "";
-    }
+    host.remove();
   }
 }
