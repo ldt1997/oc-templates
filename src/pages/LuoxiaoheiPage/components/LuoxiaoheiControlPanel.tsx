@@ -1,4 +1,5 @@
 import {
+  Button,
   Card,
   ColorPicker,
   Form,
@@ -8,7 +9,7 @@ import {
   Upload,
   type UploadProps,
 } from "antd";
-import { InboxOutlined } from "@ant-design/icons";
+import { InboxOutlined, SwapOutlined } from "@ant-design/icons";
 import type { ColorPair } from "./colorRecommendation";
 
 const { Dragger } = Upload;
@@ -24,6 +25,7 @@ interface LuoxiaoheiControlPanelProps {
   bgColor2: string;
   onBgColor1Change: (value: string) => void;
   onBgColor2Change: (value: string) => void;
+  onSwapBackgroundColors: () => void;
   title1: string;
   title2: string;
   onTitle1Change: (value: string) => void;
@@ -46,6 +48,7 @@ export function LuoxiaoheiControlPanel({
   bgColor2,
   onBgColor1Change,
   onBgColor2Change,
+  onSwapBackgroundColors,
   title1,
   title2,
   onTitle1Change,
@@ -116,6 +119,17 @@ export function LuoxiaoheiControlPanel({
                 showText
               />
             </Form.Item>
+
+            <div className="luoxiaohei-inline-color-swap">
+              <Button
+                type="default"
+                shape="circle"
+                icon={<SwapOutlined />}
+                aria-label="对调背景色和左右标题"
+                className="luoxiaohei-inline-color-swap-btn"
+                onClick={onSwapBackgroundColors}
+              />
+            </div>
 
             <Form.Item
               label="背景色 2"

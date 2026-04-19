@@ -126,6 +126,19 @@ export function LuoxiaoheiPage() {
     setSelectedPairId(pair.id);
   }
 
+  function handleSwapBackgroundColors() {
+    const nextBgColor1 = bgColor2;
+    const nextBgColor2 = bgColor1;
+    const nextTitle1 = title2;
+    const nextTitle2 = title1;
+
+    setBgColor1(nextBgColor1);
+    setBgColor2(nextBgColor2);
+    setTitle1(nextTitle1);
+    setTitle2(nextTitle2);
+    setSelectedPairId("");
+  }
+
   // 导出功能
   async function handleExport() {
     if (!canvasRef.current) {
@@ -162,6 +175,7 @@ export function LuoxiaoheiPage() {
       bgColor2={bgColor2}
       onBgColor1Change={setBgColor1}
       onBgColor2Change={setBgColor2}
+      onSwapBackgroundColors={handleSwapBackgroundColors}
       title1={title1}
       title2={title2}
       onTitle1Change={setTitle1}
