@@ -36,6 +36,8 @@ const STYLE_KEYS: Array<keyof ExportStyleOverride> = [
   "transform",
   "fontSize",
 ];
+const MOBILE_EXPORT_TITLE_OFFSET_X_PX = 15;
+const MOBILE_EXPORT_TITLE_OFFSET_Y_PX = -18;
 
 let cachedFontEmbedCss: string | null = null;
 let html2canvasModulePromise: Promise<typeof import("html2canvas")> | null =
@@ -177,6 +179,16 @@ function createExportClone(
   return clone;
 }
 
+function applyExportFixes(root: HTMLElement, mobileLike: boolean) {
+  if (!mobileLike) {
+    return;
+  }
+
+  root.querySelectorAll<HTMLElement>(".luoxiaohei-title").forEach((title) => {
+    title.style.transform = `translate(${MOBILE_EXPORT_TITLE_OFFSET_X_PX}px, ${MOBILE_EXPORT_TITLE_OFFSET_Y_PX}px)`;
+  });
+}
+
 async function renderWithHtmlToImage(
   element: HTMLElement,
   options: Required<
@@ -257,6 +269,7 @@ export async function exportElementAsPng(
   try {
     host.append(exportClone);
     document.body.append(host);
+    applyExportFixes(exportClone, preferHtml2Canvas);
 
     await waitForFontsReady();
     await waitForImagesReady(exportClone);
