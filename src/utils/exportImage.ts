@@ -38,8 +38,10 @@ const STYLE_KEYS: Array<keyof ExportStyleOverride> = [
 ];
 
 let cachedFontEmbedCss: string | null = null;
-let html2canvasModulePromise: Promise<typeof import("html2canvas")> | null = null;
-let htmlToImageModulePromise: Promise<typeof import("html-to-image")> | null = null;
+let html2canvasModulePromise: Promise<typeof import("html2canvas")> | null =
+  null;
+let htmlToImageModulePromise: Promise<typeof import("html-to-image")> | null =
+  null;
 
 function loadHtml2canvasModule() {
   if (!html2canvasModulePromise) {
@@ -57,13 +59,21 @@ function loadHtmlToImageModule() {
   return htmlToImageModulePromise;
 }
 
+function isMobileLikeDevice() {
+  const ua = navigator.userAgent || "";
+  const byUa = /Android|iPhone|iPad|iPod|Mobile|Windows Phone/i.test(ua);
+  const byViewport =
+    window.matchMedia?.("(max-width: 960px)")?.matches ?? false;
+  return byUa || byViewport;
+}
+
 function nextAnimationFrame(): Promise<void> {
   return new Promise((resolve) => {
     requestAnimationFrame(() => resolve());
   });
 }
 
-async function waitForFontsReady(root: HTMLElement) {
+async function waitForFontsReady() {
   if (typeof document.fonts?.ready !== "undefined") {
     await document.fonts.ready;
   }
@@ -72,13 +82,16 @@ async function waitForFontsReady(root: HTMLElement) {
     try {
       await Promise.all([
         document.fonts.load("400 16px 'YuanGuSongTi-F'"),
-        document.fonts.load("400 16px 'Monaco'"),
+        document.fonts.load("400 16px 'SFMono-Regular'"),
+        document.fonts.load("400 16px 'Menlo'"),
       ]);
     } catch {
       // Continue with already available fonts.
     }
   }
+}
 
+async function ensureFontEmbedCss(root: HTMLElement) {
   if (!cachedFontEmbedCss) {
     try {
       const { getFontEmbedCSS } = await loadHtmlToImageModule();
@@ -166,7 +179,12 @@ function createExportClone(
 
 async function renderWithHtmlToImage(
   element: HTMLElement,
-  options: Required<Pick<ExportElementAsPngOptions, "width" | "height" | "backgroundColor" | "pixelRatio">>,
+  options: Required<
+    Pick<
+      ExportElementAsPngOptions,
+      "width" | "height" | "backgroundColor" | "pixelRatio"
+    >
+  >,
 ) {
   const { toPng } = await loadHtmlToImageModule();
 
@@ -184,7 +202,12 @@ async function renderWithHtmlToImage(
 
 async function renderWithHtml2Canvas(
   element: HTMLElement,
-  options: Required<Pick<ExportElementAsPngOptions, "width" | "height" | "backgroundColor" | "pixelRatio">>,
+  options: Required<
+    Pick<
+      ExportElementAsPngOptions,
+      "width" | "height" | "backgroundColor" | "pixelRatio"
+    >
+  >,
 ) {
   const html2canvas = (await loadHtml2canvasModule()).default;
   const canvas = await html2canvas(element, {
@@ -227,6 +250,7 @@ export async function exportElementAsPng(
     backgroundColor,
     pixelRatio,
   } as const;
+  const preferHtml2Canvas = isMobileLikeDevice();
   const host = createExportHost(width, height);
   const exportClone = createExportClone(element, resolvedStyle);
 
@@ -234,16 +258,26 @@ export async function exportElementAsPng(
     host.append(exportClone);
     document.body.append(host);
 
-    await waitForFontsReady(exportClone);
+    await waitForFontsReady();
     await waitForImagesReady(exportClone);
     await nextAnimationFrame();
     await nextAnimationFrame();
 
     let dataUrl: string;
-    try {
-      dataUrl = await renderWithHtmlToImage(exportClone, exportOptions);
-    } catch {
-      dataUrl = await renderWithHtml2Canvas(exportClone, exportOptions);
+    if (preferHtml2Canvas) {
+      try {
+        dataUrl = await renderWithHtml2Canvas(exportClone, exportOptions);
+      } catch {
+        await ensureFontEmbedCss(exportClone);
+        dataUrl = await renderWithHtmlToImage(exportClone, exportOptions);
+      }
+    } else {
+      try {
+        await ensureFontEmbedCss(exportClone);
+        dataUrl = await renderWithHtmlToImage(exportClone, exportOptions);
+      } catch {
+        dataUrl = await renderWithHtml2Canvas(exportClone, exportOptions);
+      }
     }
 
     const link = document.createElement("a");
